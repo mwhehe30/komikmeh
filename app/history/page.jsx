@@ -1,5 +1,6 @@
 'use client';
 
+import UniversalImage from '@/components/UniversalImage';
 import useHistoryStore from '@/store/useHistoryStore';
 import { Trash2 } from 'lucide-react';
 import Link from 'next/link';
