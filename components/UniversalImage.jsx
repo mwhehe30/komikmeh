@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const UniversalImage = ({
   src,
@@ -17,6 +17,10 @@ const UniversalImage = ({
 }) => {
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    setError(false);
+  }, [src]);
+
   const hasSrc = src && src.trim() !== '';
 
   if (!hasSrc || error) {
@@ -25,7 +29,17 @@ const UniversalImage = ({
         className={`bg-zinc-800 flex items-center justify-center overflow-hidden ${className} ${
           fill ? 'w-full h-full' : ''
         }`}
-        style={!fill ? { width, height } : {}}
+        style={
+          !fill
+            ? {
+                width,
+                height: 'auto',
+                maxWidth: '100%',
+                aspectRatio:
+                  width && height ? `${width} / ${height}` : undefined,
+              }
+            : {}
+        }
       >
         {fallback || (
           <span className='text-zinc-600 text-xs font-medium'>No Image</span>
@@ -36,7 +50,6 @@ const UniversalImage = ({
 
   return (
     <Image
-      key={src}
       src={src}
       alt={alt || 'Image'}
       className={className}

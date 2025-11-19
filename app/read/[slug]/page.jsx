@@ -87,7 +87,7 @@ const Page = () => {
     >
       <div className='container mx-auto'>
         <section
-          className={`bg-[#27272a] px-8 rounded-lg py-6 flex items-center justify-between sticky top-2 z-50 mb-4 ${
+          className={`bg-[#27272a] md:px-8 px-3 mx-2 rounded-lg py-6 flex items-center justify-between sticky top-2 z-50 mb-4 ${
             show ? 'translate-y-0' : '-translate-y-40'
           } transition-all duration-300`}
         >
@@ -97,7 +97,7 @@ const Page = () => {
           >
             <ArrowLeft />
           </button>
-          <div className='flex items-center justify-center gap-2'>
+          <div className='flex items-center justify-center gap-2 px-4'>
             <h1 className='text-lg font-medium w-fit line-clamp-1 break-all'>
               {chapter?.title}
             </h1>
