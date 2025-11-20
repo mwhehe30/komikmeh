@@ -54,7 +54,7 @@ export default function Home() {
   }, [latestKomik, visibleCount]);
 
   return (
-    <main className='container mx-auto px-4 pt-4 pb-24'>
+    <main className='container mx-auto px-4 pt-8 pb-24'>
       <h1 className='text-3xl font-bold mb-6 bg-clip-text text-transparent bg-linear-to-r from-white to-gray-400'>
         Update Terbaru
       </h1>

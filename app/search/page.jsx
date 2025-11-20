@@ -164,7 +164,7 @@ const SearchContent = () => {
         results.length > 0 ? (
           <div className='space-y-6'>
             <h2 className='text-xl font-semibold text-gray-300'>
-              Hasil pencarian untuk &quot;{query}&quot; ({results.length})
+              Hasil pencarian untuk &quot;{query}&quot;
             </h2>
             <div className='grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6'>
               {results.map((komik, index) => (
