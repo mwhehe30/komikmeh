@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import BookmarkButton from './BookmarkButton';
 import UniversalImage from './UniversalImage';
 
 import { memo } from 'react';
@@ -26,11 +27,16 @@ const KomikCard = memo(({ komik, priority = false }) => {
 
         {/* Type Badge (Optional if data exists) */}
         {komik.type && (
-          <span className='absolute top-2 left-2 bg-primary/90 text-white text-[10px] md:text-xs px-1.5 py-0.5 md:px-2 md:py-1 rounded-md backdrop-blur-sm'>
+          <span className='absolute top-2 left-2 bg-primary/90 text-white text-[10px] md:text-xs px-1.5 py-0.5 md:px-2 md:py-1 rounded-md backdrop-blur-sm z-10'>
             {komik.type}
           </span>
         )}
       </Link>
+
+      {/* Bookmark Button */}
+      <div className='absolute top-2 right-2 z-20'>
+        <BookmarkButton komik={komik} />
+      </div>
 
       {/* Content Info */}
       <div className='relative md:absolute bottom-0 left-0 right-0 p-2 md:p-4 bg-zinc-900 md:bg-transparent rounded-b-xl md:rounded-none'>

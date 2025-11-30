@@ -117,7 +117,7 @@ const Page = () => {
         </section>
 
         {!chapter ? (
-          <div className='max-w-5xl mx-auto space-y-4'>
+          <div className='max-w-3xl mx-auto space-y-4'>
             {[...Array(3)].map((_, i) => (
               <Skeleton key={i} className='w-full aspect-2/3 rounded-lg' />
             ))}
@@ -174,7 +174,7 @@ const Page = () => {
           </section>
         )}
 
-        <section className='flex flex-col max-w-5xl mx-auto'>
+        <section className='flex flex-col max-w-3xl mx-auto'>
           {chapter?.images?.map((src, i) => (
             <UniversalImage
               key={i}

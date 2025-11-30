@@ -3,10 +3,11 @@
 import { Skeleton } from '@/components/Skeleton';
 import UniversalImage from '@/components/UniversalImage';
 import { getDetailKomik } from '@/lib/api';
+import useBookmarkStore from '@/store/useBookmarkStore';
 import useHistoryStore from '@/store/useHistoryStore';
-import { ArrowDown, ArrowUp } from 'lucide-react';
+import { ArrowDown, ArrowLeft, ArrowUp, Heart } from 'lucide-react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import TimeAgo from 'timeago-react';
 import * as timeago from 'timeago.js';
@@ -16,9 +17,12 @@ timeago.register('id_ID', id);
 
 const Page = () => {
   const { slug } = useParams();
+  const router = useRouter();
   const [detailKomik, setDetailKomik] = useState(null);
   const { readChapters } = useHistoryStore();
+  const { bookmarks, toggleBookmark } = useBookmarkStore();
   const [sortOrder, setSortOrder] = useState('desc');
+  const [isBookmarked, setIsBookmarked] = useState(false);
 
   useEffect(() => {
     const fetchDetailKomik = async () => {
@@ -28,12 +32,19 @@ const Page = () => {
     fetchDetailKomik();
   }, [slug]);
 
+  useEffect(() => {
+    if (detailKomik) {
+      setIsBookmarked(bookmarks.some((b) => b.slug === detailKomik.slug));
+    }
+  }, [bookmarks, detailKomik]);
+
   return (
     <main className='min-h-screen pb-24'>
       {detailKomik ? (
         <>
           {/* Hero Section with Blurred Background */}
           <div className='relative w-full min-h-[50vh] md:min-h-[500px] flex items-end overflow-hidden'>
+            {/* Back Button */}
             <div className='absolute inset-0 bg-black/60 z-10' />
             <div
               className='absolute inset-0 bg-cover bg-center blur-2xl scale-110 opacity-40'
@@ -43,13 +54,21 @@ const Page = () => {
 
             <div className='container mx-auto px-4 relative z-30 flex flex-col md:flex-row items-end pb-10 gap-8 w-full'>
               {/* Thumbnail */}
-              <div className='relative w-[calc(100%-30px)] md:w-56 aspect-3/4 shrink-0 rounded-xl overflow-hidden shadow-2xl border-4 border-zinc-800/50 mx-auto md:mx-0 mt-4'>
-                <UniversalImage
-                  src={detailKomik?.thumbnail}
-                  alt={detailKomik?.title}
-                  fill
-                  className='object-cover'
-                />
+              <div className='flex flex-col gap-2 w-[calc(100%-30px)] md:w-56 shrink-0 mx-auto md:mx-0 mt-4'>
+                <button
+                  onClick={() => router.back()}
+                  className='self-start p-2 bg-black/50 hover:bg-black/70 text-white rounded-full backdrop-blur-sm transition-colors'
+                >
+                  <ArrowLeft className='w-6 h-6' />
+                </button>
+                <div className='relative w-full aspect-3/4 rounded-xl overflow-hidden shadow-2xl border-4 border-zinc-800/50'>
+                  <UniversalImage
+                    src={detailKomik?.thumbnail}
+                    alt={detailKomik?.title}
+                    fill
+                    className='object-cover'
+                  />
+                </div>
               </div>
 
               {/* Title & Info */}
@@ -78,9 +97,10 @@ const Page = () => {
                   ))}
                 </div>
 
-                {/* Start Reading Button */}
-                {detailKomik?.chapters?.length > 0 && (
-                  <div className='flex justify-center md:justify-start'>
+                {/* Buttons */}
+                <div className='flex flex-col md:flex-row justify-center md:justify-start gap-4'>
+                  {/* Start Reading Button */}
+                  {detailKomik?.chapters?.length > 0 && (
                     <Link
                       href={`/read/${
                         detailKomik.chapters[detailKomik.chapters.length - 1]
@@ -94,8 +114,29 @@ const Page = () => {
                         Baca Chapter Awal
                       </span>
                     </Link>
-                  </div>
-                )}
+                  )}
+
+                  {/* Bookmark Button */}
+                  <button
+                    onClick={() => toggleBookmark(detailKomik)}
+                    className={`relative inline-flex items-center justify-center gap-2 px-6 py-4 overflow-hidden font-bold transition-all duration-300 ease-out rounded-2xl shadow-xl group hover:scale-105 w-full md:w-auto border ${
+                      isBookmarked
+                        ? 'bg-red-500/20 border-red-500/50 text-red-500 hover:bg-red-500/30'
+                        : 'bg-zinc-800/60 border-white/10 text-white hover:bg-zinc-800'
+                    }`}
+                  >
+                    <Heart
+                      className={`w-6 h-6 transition-transform duration-300 ${
+                        isBookmarked
+                          ? 'fill-current scale-110'
+                          : 'group-hover:scale-110'
+                      }`}
+                    />
+                    <span className='relative text-lg tracking-wide'>
+                      {isBookmarked ? 'Favorit' : 'Favorit'}
+                    </span>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
