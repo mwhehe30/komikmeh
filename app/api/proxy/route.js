@@ -1,5 +1,7 @@
 import { NextRequest } from 'next/server';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req) {
     const url = req.nextUrl.searchParams.get('url');
 
@@ -8,8 +10,9 @@ export async function GET(req) {
     }
 
     try {
-        console.log('Fetching image:', url); // Added log for debugging
+        console.log('Fetching image:', url);
         const response = await fetch(url, {
+            cache: 'no-store',
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
                 'Referer': 'https://v1.komikcast.fit/',
@@ -31,7 +34,7 @@ export async function GET(req) {
         // Standard headers for the response
         const headers = new Headers();
         headers.set('Content-Type', response.headers.get('Content-Type') || 'image/jpeg');
-        headers.set('Cache-Control', 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=43200');
+        headers.set('Cache-Control', 'public, max-age=3600, stale-while-revalidate=1800');
 
         return new Response(buffer, {
             headers,
