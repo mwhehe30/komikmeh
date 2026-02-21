@@ -177,6 +177,7 @@ const Page = () => {
               alt={`Page ${i + 1}`}
               className="w-full h-auto object-contain block"
               loading="lazy"
+              referrerPolicy="no-referrer"
             />
           </div>
         ))}
@@ -264,11 +265,10 @@ const Page = () => {
                       router.push(`/series/${slug}/chapter/${ch.data.index}`);
                       setIsModalOpen(false);
                     }}
-                    className={`p-3 rounded-2xl border text-sm font-bold transition-all ${
-                      ch.data.index.toString() === index.toString()
+                    className={`p-3 rounded-2xl border text-sm font-bold transition-all ${ch.data.index.toString() === index.toString()
                         ? 'bg-purple-600 border-purple-500 text-white shadow-[0_0_15px_rgba(147,51,234,0.3)]'
                         : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white'
-                    }`}
+                      }`}
                   >
                     Ch. {ch.data.index}
                   </button>
