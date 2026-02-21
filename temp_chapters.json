@@ -1,0 +1,1190 @@
+{
+  "status": 200,
+  "message": "Chapters for the series retrieved successfully",
+  "data": [
+    {
+      "id": 384369,
+      "createdAt": "2026-02-21T16:25:36.226+07:00",
+      "updatedAt": "2026-02-21T16:25:36.226+07:00",
+      "data": {
+        "index": 74,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 0,
+        "history": 0,
+        "total": 0
+      }
+    },
+    {
+      "id": 384229,
+      "createdAt": "2026-02-20T10:29:54.708+07:00",
+      "updatedAt": "2026-02-20T10:29:54.708+07:00",
+      "data": {
+        "index": 73,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 740,
+        "history": 122,
+        "total": 862
+      }
+    },
+    {
+      "id": 384038,
+      "createdAt": "2026-02-19T15:41:56.175+07:00",
+      "updatedAt": "2026-02-19T15:41:56.175+07:00",
+      "data": {
+        "index": 72,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 1048,
+        "history": 147,
+        "total": 1195
+      }
+    },
+    {
+      "id": 380872,
+      "createdAt": "2026-01-25T14:55:36.000+07:00",
+      "updatedAt": "2026-01-25T14:55:36.000+07:00",
+      "data": {
+        "index": 71,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 460,
+        "history": 78,
+        "total": 538
+      }
+    },
+    {
+      "id": 380871,
+      "createdAt": "2026-01-25T14:55:29.000+07:00",
+      "updatedAt": "2026-01-25T14:55:29.000+07:00",
+      "data": {
+        "index": 70,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 338,
+        "history": 61,
+        "total": 399
+      }
+    },
+    {
+      "id": 379226,
+      "createdAt": "2026-01-21T19:10:20.000+07:00",
+      "updatedAt": "2026-01-21T19:10:20.000+07:00",
+      "data": {
+        "index": 69,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 277,
+        "history": 52,
+        "total": 329
+      }
+    },
+    {
+      "id": 379078,
+      "createdAt": "2026-01-18T15:08:08.000+07:00",
+      "updatedAt": "2026-01-21T19:10:21.000+07:00",
+      "data": {
+        "index": 68,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 201,
+        "history": 46,
+        "total": 247
+      }
+    },
+    {
+      "id": 377187,
+      "createdAt": "2025-12-12T17:30:30.000+07:00",
+      "updatedAt": "2025-12-12T17:30:30.000+07:00",
+      "data": {
+        "index": 67,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 133,
+        "history": 27,
+        "total": 160
+      }
+    },
+    {
+      "id": 377186,
+      "createdAt": "2025-12-11T14:33:19.000+07:00",
+      "updatedAt": "2025-12-11T14:33:19.000+07:00",
+      "data": {
+        "index": 66,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 96,
+        "history": 19,
+        "total": 115
+      }
+    },
+    {
+      "id": 377190,
+      "createdAt": "2025-12-07T16:55:25.000+07:00",
+      "updatedAt": "2025-12-07T16:55:25.000+07:00",
+      "data": {
+        "index": 65,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 100,
+        "history": 17,
+        "total": 117
+      }
+    },
+    {
+      "id": 377189,
+      "createdAt": "2025-12-05T15:28:31.000+07:00",
+      "updatedAt": "2025-12-05T15:28:31.000+07:00",
+      "data": {
+        "index": 64,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 79,
+        "history": 14,
+        "total": 93
+      }
+    },
+    {
+      "id": 377188,
+      "createdAt": "2025-12-04T12:52:59.000+07:00",
+      "updatedAt": "2025-12-04T12:52:59.000+07:00",
+      "data": {
+        "index": 63,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 79,
+        "history": 12,
+        "total": 91
+      }
+    },
+    {
+      "id": 377192,
+      "createdAt": "2025-11-24T15:02:01.000+07:00",
+      "updatedAt": "2025-12-04T12:53:00.000+07:00",
+      "data": {
+        "index": 62,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 89,
+        "history": 13,
+        "total": 102
+      }
+    },
+    {
+      "id": 377191,
+      "createdAt": "2025-11-21T16:38:04.000+07:00",
+      "updatedAt": "2025-11-21T16:38:04.000+07:00",
+      "data": {
+        "index": 61,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 82,
+        "history": 12,
+        "total": 94
+      }
+    },
+    {
+      "id": 377193,
+      "createdAt": "2025-11-13T12:51:00.000+07:00",
+      "updatedAt": "2025-11-13T12:51:00.000+07:00",
+      "data": {
+        "index": 60,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 86,
+        "history": 15,
+        "total": 101
+      }
+    },
+    {
+      "id": 377195,
+      "createdAt": "2025-11-13T12:50:53.000+07:00",
+      "updatedAt": "2025-11-13T12:50:53.000+07:00",
+      "data": {
+        "index": 59,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 64,
+        "history": 10,
+        "total": 74
+      }
+    },
+    {
+      "id": 377196,
+      "createdAt": "2025-11-12T23:44:12.000+07:00",
+      "updatedAt": "2025-11-13T12:51:02.000+07:00",
+      "data": {
+        "index": 58,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 68,
+        "history": 10,
+        "total": 78
+      }
+    },
+    {
+      "id": 377199,
+      "createdAt": "2025-11-09T14:26:23.000+07:00",
+      "updatedAt": "2025-11-09T14:26:23.000+07:00",
+      "data": {
+        "index": 57,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 65,
+        "history": 11,
+        "total": 76
+      }
+    },
+    {
+      "id": 377200,
+      "createdAt": "2025-11-06T11:27:47.000+07:00",
+      "updatedAt": "2025-11-06T11:27:47.000+07:00",
+      "data": {
+        "index": 56,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 71,
+        "history": 10,
+        "total": 81
+      }
+    },
+    {
+      "id": 377198,
+      "createdAt": "2025-11-06T11:27:41.000+07:00",
+      "updatedAt": "2025-11-06T11:27:41.000+07:00",
+      "data": {
+        "index": 55,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 72,
+        "history": 10,
+        "total": 82
+      }
+    },
+    {
+      "id": 377197,
+      "createdAt": "2025-11-06T11:27:34.000+07:00",
+      "updatedAt": "2025-11-06T11:27:34.000+07:00",
+      "data": {
+        "index": 54,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 70,
+        "history": 10,
+        "total": 80
+      }
+    },
+    {
+      "id": 377194,
+      "createdAt": "2025-11-06T11:27:27.000+07:00",
+      "updatedAt": "2025-11-06T11:27:27.000+07:00",
+      "data": {
+        "index": 53,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 78,
+        "history": 11,
+        "total": 89
+      }
+    },
+    {
+      "id": 377201,
+      "createdAt": "2025-11-06T11:27:21.000+07:00",
+      "updatedAt": "2025-11-06T11:27:21.000+07:00",
+      "data": {
+        "index": 52,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 73,
+        "history": 10,
+        "total": 83
+      }
+    },
+    {
+      "id": 377203,
+      "createdAt": "2025-11-06T11:27:15.000+07:00",
+      "updatedAt": "2025-11-06T11:27:15.000+07:00",
+      "data": {
+        "index": 51,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 78,
+        "history": 11,
+        "total": 89
+      }
+    },
+    {
+      "id": 377202,
+      "createdAt": "2025-11-06T11:27:08.000+07:00",
+      "updatedAt": "2025-11-06T11:27:08.000+07:00",
+      "data": {
+        "index": 50,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 93,
+        "history": 13,
+        "total": 106
+      }
+    },
+    {
+      "id": 377204,
+      "createdAt": "2025-11-06T11:27:01.000+07:00",
+      "updatedAt": "2025-11-06T11:27:01.000+07:00",
+      "data": {
+        "index": 49,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 75,
+        "history": 11,
+        "total": 86
+      }
+    },
+    {
+      "id": 377206,
+      "createdAt": "2025-10-21T21:46:18.000+07:00",
+      "updatedAt": "2025-11-06T11:27:50.000+07:00",
+      "data": {
+        "index": 48,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 78,
+        "history": 13,
+        "total": 91
+      }
+    },
+    {
+      "id": 377205,
+      "createdAt": "2025-10-12T21:57:01.000+07:00",
+      "updatedAt": "2025-10-12T21:57:01.000+07:00",
+      "data": {
+        "index": 47,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 77,
+        "history": 14,
+        "total": 91
+      }
+    },
+    {
+      "id": 377207,
+      "createdAt": "2025-10-10T12:10:05.000+07:00",
+      "updatedAt": "2025-10-10T12:10:05.000+07:00",
+      "data": {
+        "index": 46,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 71,
+        "history": 12,
+        "total": 83
+      }
+    },
+    {
+      "id": 377213,
+      "createdAt": "2025-10-08T09:07:06.000+07:00",
+      "updatedAt": "2025-10-10T12:10:06.000+07:00",
+      "data": {
+        "index": 45,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 77,
+        "history": 15,
+        "total": 92
+      }
+    },
+    {
+      "id": 377220,
+      "createdAt": "2025-10-02T12:45:45.000+07:00",
+      "updatedAt": "2025-10-08T09:07:07.000+07:00",
+      "data": {
+        "index": 44,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 72,
+        "history": 15,
+        "total": 87
+      }
+    },
+    {
+      "id": 377215,
+      "createdAt": "2025-10-02T12:45:39.000+07:00",
+      "updatedAt": "2025-10-02T12:45:39.000+07:00",
+      "data": {
+        "index": 43,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 76,
+        "history": 15,
+        "total": 91
+      }
+    },
+    {
+      "id": 377210,
+      "createdAt": "2025-09-25T23:57:27.000+07:00",
+      "updatedAt": "2025-10-02T12:45:46.000+07:00",
+      "data": {
+        "index": 42,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 75,
+        "history": 15,
+        "total": 90
+      }
+    },
+    {
+      "id": 377219,
+      "createdAt": "2025-09-24T16:36:58.000+07:00",
+      "updatedAt": "2025-09-24T16:36:58.000+07:00",
+      "data": {
+        "index": 41,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 76,
+        "history": 15,
+        "total": 91
+      }
+    },
+    {
+      "id": 377208,
+      "createdAt": "2025-09-19T08:20:19.000+07:00",
+      "updatedAt": "2025-09-19T08:20:19.000+07:00",
+      "data": {
+        "index": 40,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 91,
+        "history": 18,
+        "total": 109
+      }
+    },
+    {
+      "id": 377214,
+      "createdAt": "2025-09-19T08:20:13.000+07:00",
+      "updatedAt": "2025-09-19T08:20:13.000+07:00",
+      "data": {
+        "index": 39,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 81,
+        "history": 14,
+        "total": 95
+      }
+    },
+    {
+      "id": 377209,
+      "createdAt": "2025-02-17T06:28:31.000+07:00",
+      "updatedAt": "2025-09-19T08:20:20.000+07:00",
+      "data": {
+        "index": 38,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 86,
+        "history": 15,
+        "total": 101
+      }
+    },
+    {
+      "id": 377217,
+      "createdAt": "2025-02-02T23:27:18.000+07:00",
+      "updatedAt": "2025-02-17T06:29:11.000+07:00",
+      "data": {
+        "index": 37,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 81,
+        "history": 13,
+        "total": 94
+      }
+    },
+    {
+      "id": 377216,
+      "createdAt": "2025-01-14T22:40:08.000+07:00",
+      "updatedAt": "2025-01-14T23:50:34.000+07:00",
+      "data": {
+        "index": 36,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 86,
+        "history": 13,
+        "total": 99
+      }
+    },
+    {
+      "id": 377212,
+      "createdAt": "2024-12-10T23:22:10.000+07:00",
+      "updatedAt": "2024-12-10T23:22:10.000+07:00",
+      "data": {
+        "index": 35,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 81,
+        "history": 12,
+        "total": 93
+      }
+    },
+    {
+      "id": 377218,
+      "createdAt": "2024-12-01T23:37:35.000+07:00",
+      "updatedAt": "2024-12-10T23:22:06.000+07:00",
+      "data": {
+        "index": 34,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 75,
+        "history": 11,
+        "total": 86
+      }
+    },
+    {
+      "id": 377211,
+      "createdAt": "2024-11-20T22:36:41.000+07:00",
+      "updatedAt": "2024-12-01T23:37:31.000+07:00",
+      "data": {
+        "index": 33,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 82,
+        "history": 12,
+        "total": 94
+      }
+    },
+    {
+      "id": 377224,
+      "createdAt": "2024-10-30T23:43:00.000+07:00",
+      "updatedAt": "2024-11-20T22:36:38.000+07:00",
+      "data": {
+        "index": 32,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 90,
+        "history": 14,
+        "total": 104
+      }
+    },
+    {
+      "id": 377222,
+      "createdAt": "2024-10-07T21:47:16.000+07:00",
+      "updatedAt": "2024-10-30T23:42:57.000+07:00",
+      "data": {
+        "index": 31,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 89,
+        "history": 14,
+        "total": 103
+      }
+    },
+    {
+      "id": 377221,
+      "createdAt": "2024-09-22T06:34:44.000+07:00",
+      "updatedAt": "2024-10-07T21:47:17.000+07:00",
+      "data": {
+        "index": 30,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 106,
+        "history": 17,
+        "total": 123
+      }
+    },
+    {
+      "id": 377225,
+      "createdAt": "2024-09-17T21:12:28.000+07:00",
+      "updatedAt": "2024-09-22T06:34:46.000+07:00",
+      "data": {
+        "index": 29,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 96,
+        "history": 16,
+        "total": 112
+      }
+    },
+    {
+      "id": 377226,
+      "createdAt": "2024-09-09T17:05:13.000+07:00",
+      "updatedAt": "2024-09-09T17:05:13.000+07:00",
+      "data": {
+        "index": 28,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 93,
+        "history": 18,
+        "total": 111
+      }
+    },
+    {
+      "id": 377235,
+      "createdAt": "2024-09-06T10:29:37.000+07:00",
+      "updatedAt": "2024-09-09T17:05:50.000+07:00",
+      "data": {
+        "index": 27,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 90,
+        "history": 15,
+        "total": 105
+      }
+    },
+    {
+      "id": 377230,
+      "createdAt": "2024-08-14T11:52:04.000+07:00",
+      "updatedAt": "2024-09-09T17:05:10.000+07:00",
+      "data": {
+        "index": 26,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 95,
+        "history": 15,
+        "total": 110
+      }
+    },
+    {
+      "id": 377234,
+      "createdAt": "2024-08-14T11:51:53.000+07:00",
+      "updatedAt": "2024-08-14T11:51:53.000+07:00",
+      "data": {
+        "index": 25,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 104,
+        "history": 16,
+        "total": 120
+      }
+    },
+    {
+      "id": 377228,
+      "createdAt": "2024-08-14T11:51:46.000+07:00",
+      "updatedAt": "2024-08-14T11:51:46.000+07:00",
+      "data": {
+        "index": 24,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 104,
+        "history": 15,
+        "total": 119
+      }
+    },
+    {
+      "id": 377227,
+      "createdAt": "2024-08-14T11:51:37.000+07:00",
+      "updatedAt": "2024-08-14T11:51:37.000+07:00",
+      "data": {
+        "index": 23,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 122,
+        "history": 20,
+        "total": 142
+      }
+    },
+    {
+      "id": 377223,
+      "createdAt": "2024-08-13T20:07:54.000+07:00",
+      "updatedAt": "2024-08-14T11:52:04.000+07:00",
+      "data": {
+        "index": 22,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 133,
+        "history": 22,
+        "total": 155
+      }
+    },
+    {
+      "id": 377232,
+      "createdAt": "2024-08-13T11:45:00.000+07:00",
+      "updatedAt": "2024-08-13T20:07:56.000+07:00",
+      "data": {
+        "index": 21,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 123,
+        "history": 26,
+        "total": 149
+      }
+    },
+    {
+      "id": 377231,
+      "createdAt": "2024-08-13T11:44:54.000+07:00",
+      "updatedAt": "2024-08-13T11:44:54.000+07:00",
+      "data": {
+        "index": 20,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 128,
+        "history": 26,
+        "total": 154
+      }
+    },
+    {
+      "id": 377229,
+      "createdAt": "2024-08-13T11:44:46.000+07:00",
+      "updatedAt": "2024-08-13T11:44:46.000+07:00",
+      "data": {
+        "index": 19,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 120,
+        "history": 26,
+        "total": 146
+      }
+    },
+    {
+      "id": 377233,
+      "createdAt": "2024-08-13T11:44:33.000+07:00",
+      "updatedAt": "2024-08-13T11:44:33.000+07:00",
+      "data": {
+        "index": 18,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 122,
+        "history": 25,
+        "total": 147
+      }
+    },
+    {
+      "id": 377236,
+      "createdAt": "2024-08-13T11:44:26.000+07:00",
+      "updatedAt": "2024-08-13T11:44:26.000+07:00",
+      "data": {
+        "index": 17,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 126,
+        "history": 23,
+        "total": 149
+      }
+    },
+    {
+      "id": 377237,
+      "createdAt": "2024-08-13T11:44:19.000+07:00",
+      "updatedAt": "2024-08-13T11:44:19.000+07:00",
+      "data": {
+        "index": 16,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 135,
+        "history": 25,
+        "total": 160
+      }
+    },
+    {
+      "id": 377238,
+      "createdAt": "2024-07-09T11:24:00.000+07:00",
+      "updatedAt": "2024-08-13T11:45:02.000+07:00",
+      "data": {
+        "index": 15,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 124,
+        "history": 27,
+        "total": 151
+      }
+    },
+    {
+      "id": 377239,
+      "createdAt": "2024-07-09T11:23:52.000+07:00",
+      "updatedAt": "2024-07-09T11:23:52.000+07:00",
+      "data": {
+        "index": 14,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 125,
+        "history": 24,
+        "total": 149
+      }
+    },
+    {
+      "id": 377240,
+      "createdAt": "2024-07-09T11:23:44.000+07:00",
+      "updatedAt": "2024-07-09T11:23:44.000+07:00",
+      "data": {
+        "index": 13,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 127,
+        "history": 25,
+        "total": 152
+      }
+    },
+    {
+      "id": 377241,
+      "createdAt": "2024-07-09T11:23:34.000+07:00",
+      "updatedAt": "2024-07-09T11:23:34.000+07:00",
+      "data": {
+        "index": 12,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 146,
+        "history": 26,
+        "total": 172
+      }
+    },
+    {
+      "id": 377242,
+      "createdAt": "2024-07-09T11:23:26.000+07:00",
+      "updatedAt": "2024-07-09T11:23:26.000+07:00",
+      "data": {
+        "index": 11,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 147,
+        "history": 25,
+        "total": 172
+      }
+    },
+    {
+      "id": 377248,
+      "createdAt": "2024-07-09T11:23:19.000+07:00",
+      "updatedAt": "2024-07-09T11:23:19.000+07:00",
+      "data": {
+        "index": 10,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 160,
+        "history": 27,
+        "total": 187
+      }
+    },
+    {
+      "id": 377250,
+      "createdAt": "2024-07-09T11:23:10.000+07:00",
+      "updatedAt": "2024-07-09T11:23:10.000+07:00",
+      "data": {
+        "index": 9,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 163,
+        "history": 27,
+        "total": 190
+      }
+    },
+    {
+      "id": 377246,
+      "createdAt": "2024-07-09T11:23:02.000+07:00",
+      "updatedAt": "2024-07-09T11:23:02.000+07:00",
+      "data": {
+        "index": 8,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 161,
+        "history": 30,
+        "total": 191
+      }
+    },
+    {
+      "id": 377245,
+      "createdAt": "2024-07-09T11:22:55.000+07:00",
+      "updatedAt": "2024-07-09T11:22:55.000+07:00",
+      "data": {
+        "index": 7,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 166,
+        "history": 34,
+        "total": 200
+      }
+    },
+    {
+      "id": 377247,
+      "createdAt": "2024-07-08T20:10:07.000+07:00",
+      "updatedAt": "2024-07-09T11:24:03.000+07:00",
+      "data": {
+        "index": 6,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 189,
+        "history": 36,
+        "total": 225
+      }
+    },
+    {
+      "id": 377249,
+      "createdAt": "2024-07-08T20:10:02.000+07:00",
+      "updatedAt": "2024-07-08T20:24:57.000+07:00",
+      "data": {
+        "index": 5,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 205,
+        "history": 37,
+        "total": 242
+      }
+    },
+    {
+      "id": 377243,
+      "createdAt": "2024-07-08T20:09:55.000+07:00",
+      "updatedAt": "2024-07-08T20:24:52.000+07:00",
+      "data": {
+        "index": 4,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 222,
+        "history": 39,
+        "total": 261
+      }
+    },
+    {
+      "id": 377244,
+      "createdAt": "2024-07-06T21:25:47.000+07:00",
+      "updatedAt": "2024-07-08T20:24:47.000+07:00",
+      "data": {
+        "index": 3,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 238,
+        "history": 44,
+        "total": 282
+      }
+    },
+    {
+      "id": 377254,
+      "createdAt": "2024-07-05T11:07:10.000+07:00",
+      "updatedAt": "2024-07-08T20:24:23.000+07:00",
+      "data": {
+        "index": 2,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 308,
+        "history": 58,
+        "total": 366
+      }
+    },
+    {
+      "id": 377251,
+      "createdAt": "2024-07-05T11:06:32.000+07:00",
+      "updatedAt": "2024-07-08T20:24:11.000+07:00",
+      "data": {
+        "index": 1,
+        "isDraft": false,
+        "seriesId": 8175
+      },
+      "isRead": false,
+      "views": {
+        "analytics": 532,
+        "history": 100,
+        "total": 632
+      }
+    }
+  ]
+}
