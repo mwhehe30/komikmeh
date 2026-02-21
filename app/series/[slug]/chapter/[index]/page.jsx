@@ -200,15 +200,9 @@ const Page = () => {
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          {/* Home / Currently empty play icon area - mapping to Select Chapter but just visually a Play for now */}
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="text-neutral-400 hover:text-white transition-colors"
-          >
-            <Play className="w-5 h-5" />
-          </button>
+          <Play className="w-5 h-5" />
 
-          {/* List - Back to Series */}
+          {/* List - List Chapter */}
           <button
             onClick={() => setIsModalOpen(true)}
             className="text-neutral-400 hover:text-white transition-colors"
@@ -270,10 +264,11 @@ const Page = () => {
                       router.push(`/series/${slug}/chapter/${ch.data.index}`);
                       setIsModalOpen(false);
                     }}
-                    className={`p-3 rounded-2xl border text-sm font-bold transition-all ${ch.data.index.toString() === index.toString()
+                    className={`p-3 rounded-2xl border text-sm font-bold transition-all ${
+                      ch.data.index.toString() === index.toString()
                         ? 'bg-purple-600 border-purple-500 text-white shadow-[0_0_15px_rgba(147,51,234,0.3)]'
                         : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white'
-                      }`}
+                    }`}
                   >
                     Ch. {ch.data.index}
                   </button>
