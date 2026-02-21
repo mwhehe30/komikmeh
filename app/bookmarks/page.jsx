@@ -79,7 +79,12 @@ export default function BookmarksPage() {
                                                 <div className="flex items-center gap-1.5">
                                                     <div className="relative w-6 h-6 rounded-md overflow-hidden shadow-sm backdrop-blur-md bg-black/20 flex items-center justify-center p-0.5 border border-white/10">
                                                         <Image
-                                                            src={`/${item.data.format.toLowerCase().trim()}.svg`}
+                                                            src={
+                                                                item.data.format.toLowerCase().trim() === 'webtoon' ||
+                                                                    item.data.format.toLowerCase().trim() === 'manga'
+                                                                    ? '/manga.svg'
+                                                                    : `/${item.data.format.toLowerCase().trim()}.svg`
+                                                            }
                                                             alt={item.data.format}
                                                             width={24}
                                                             height={24}

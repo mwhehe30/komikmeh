@@ -186,7 +186,7 @@ const Page = () => {
             <div className="flex flex-wrap items-center gap-2 mb-3">
               {detail.data?.format && (
                 <span className="px-3 py-1 text-xs font-bold uppercase tracking-wider text-white bg-blue-600 rounded-full shadow-sm">
-                  {detail.data.format}
+                  {detail.data.format.toLowerCase().trim() === 'webtoon' ? 'mangatoon' : detail.data.format}
                 </span>
               )}
               {detail.data?.status && (
