@@ -11,6 +11,7 @@ export const metadata = {
   title: 'KomikMeh',
   description: 'KomikMeh - Platform baca komik terbaik',
   manifest: '/manifest.json',
+  referrer: 'no-referrer',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
