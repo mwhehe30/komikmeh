@@ -334,7 +334,7 @@ const Page = () => {
                                 Chapter {ch.data.index}
                               </span>
                               {!isRead && new Date() - new Date(ch.createdAt) <
-                                5 * 24 * 60 * 60 * 1000 && (
+                                3 * 24 * 60 * 60 * 1000 && (
                                   <span className="shrink-0 px-1.5 py-0.5 text-[9px] font-bold text-red-600 dark:text-red-400 bg-red-100 dark:bg-red-900/30 rounded flex items-center">
                                     NEW
                                   </span>
