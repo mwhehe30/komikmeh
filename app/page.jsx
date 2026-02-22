@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Star, Bookmark, Bell, BellRing } from 'lucide-react';
 import SkeletonCard from '@/components/SkeletonCard';
-import { requestNotificationPermission } from '@/lib/notifications';
+import { requestNotificationPermission, sendNotification } from '@/lib/notifications';
 
 export default function Page() {
   const TAKE = 12;
@@ -31,6 +31,11 @@ export default function Page() {
     const granted = await requestNotificationPermission();
     if (granted) {
       setNotifPermission('granted');
+      // Kirim notifikasi konfirmasi
+      sendNotification('Notifikasi Aktif! 🔔', {
+        body: 'Anda akan mendapat notifikasi saat komik yang di-bookmark mendapat update chapter baru.',
+        tag: 'permission-granted'
+      });
     }
   };
 
