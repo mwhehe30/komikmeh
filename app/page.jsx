@@ -240,7 +240,7 @@ export default function Page() {
                     className="flex justify-between items-center px-3 py-2 rounded-xl bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800/80 dark:hover:bg-neutral-700 transition-colors border border-neutral-100 dark:border-neutral-700/50"
                   >
                     <span className="text-xs font-bold text-neutral-700 dark:text-neutral-200 line-clamp-1 mr-2">
-                      Ch. {item.chapters[0].data.index}
+                      Ch. {item.chapters[0].chapterIndex}
                     </span>
                     {item.chapters[0] &&
                       new Date() - new Date(item.chapters[0].updatedAt) <
