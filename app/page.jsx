@@ -236,7 +236,7 @@ export default function Page() {
               {item.chapters && item.chapters.length > 0 && (
                 <div className="px-3.5 pb-3.5 z-20 bg-white dark:bg-neutral-900 mt-auto">
                   <Link
-                    href={`/series/${item.data.slug}/chapter/${item.chapters[0].data.index}`}
+                    href={`/series/${item.data.slug}/chapter/${item.chapters[0].chapterIndex}`}
                     className="flex justify-between items-center px-3 py-2 rounded-xl bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800/80 dark:hover:bg-neutral-700 transition-colors border border-neutral-100 dark:border-neutral-700/50"
                   >
                     <span className="text-xs font-bold text-neutral-700 dark:text-neutral-200 line-clamp-1 mr-2">
