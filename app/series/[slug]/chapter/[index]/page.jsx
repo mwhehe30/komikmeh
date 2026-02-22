@@ -177,6 +177,7 @@ const Page = () => {
               alt={`Page ${i + 1}`}
               className="w-full h-auto object-contain block"
               loading="lazy"
+              onContextMenu={(e) => e.preventDefault()}
             />
           </div>
         ))}

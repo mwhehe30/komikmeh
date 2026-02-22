@@ -33,10 +33,7 @@ export const viewport = {
 const RootLayout = ({ children }) => {
   return (
     <html lang="en">
-      <body 
-        className={`${plusJakartaSans.variable} antialiased`}
-        onContextMenu={(e) => e.preventDefault()}
-      >
+      <body className={`${plusJakartaSans.variable} antialiased`}>
         <NotificationHandler>
           {children}
         </NotificationHandler>
