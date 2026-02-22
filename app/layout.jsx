@@ -12,6 +12,10 @@ export const metadata = {
   description: 'KomikMeh - Platform baca komik terbaik',
   manifest: '/manifest.json',
   referrer: 'no-referrer',
+  icons: {
+    icon: '/icon-192x192.png',
+    apple: '/icon-192x192.png',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
