@@ -36,7 +36,7 @@ export default function Page() {
       // Nonaktifkan notifikasi
       setNotifEnabled(false);
       localStorage.setItem('notif_enabled', 'false');
-      sendNotification('Notifikasi Dinonaktifkan �', {
+      await sendNotification('Notifikasi Dinonaktifkan', {
         body: 'Anda tidak akan menerima notifikasi update chapter.',
         tag: 'permission-disabled'
       });
@@ -47,8 +47,12 @@ export default function Page() {
         setNotifPermission('granted');
         setNotifEnabled(true);
         localStorage.setItem('notif_enabled', 'true');
+        
+        // Tunggu sebentar untuk memastikan SW ready (penting untuk mobile)
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         // Kirim notifikasi konfirmasi
-        sendNotification('Notifikasi Aktif! 🔔', {
+        await sendNotification('Notifikasi Aktif!', {
           body: 'Anda akan mendapat notifikasi saat komik yang di-bookmark mendapat update chapter baru.',
           tag: 'permission-granted'
         });
