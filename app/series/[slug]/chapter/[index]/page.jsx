@@ -173,7 +173,7 @@ const Page = () => {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src={`/api/proxy?url=${encodeURIComponent(src)}`}
+              src={src}
               alt={`Page ${i + 1}`}
               className="w-full h-auto object-contain block"
               loading="lazy"
