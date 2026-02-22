@@ -17,6 +17,7 @@ export default function Page() {
   const [loading, setLoading] = React.useState(false);
   const [bookmarks, setBookmarks] = React.useState([]);
   const [notifPermission, setNotifPermission] = React.useState('default');
+  const [notifEnabled, setNotifEnabled] = React.useState(false);
 
   // Load bookmarks on mount
   React.useEffect(() => {
@@ -25,17 +26,33 @@ export default function Page() {
     if ('Notification' in window) {
       setNotifPermission(Notification.permission);
     }
+    // Load notif preference
+    const notifPref = localStorage.getItem('notif_enabled');
+    setNotifEnabled(notifPref === 'true');
   }, []);
 
   const handleRequestPermission = async () => {
-    const granted = await requestNotificationPermission();
-    if (granted) {
-      setNotifPermission('granted');
-      // Kirim notifikasi konfirmasi
-      sendNotification('Notifikasi Aktif! 🔔', {
-        body: 'Anda akan mendapat notifikasi saat komik yang di-bookmark mendapat update chapter baru.',
-        tag: 'permission-granted'
+    if (notifPermission === 'granted' && notifEnabled) {
+      // Nonaktifkan notifikasi
+      setNotifEnabled(false);
+      localStorage.setItem('notif_enabled', 'false');
+      sendNotification('Notifikasi Dinonaktifkan �', {
+        body: 'Anda tidak akan menerima notifikasi update chapter.',
+        tag: 'permission-disabled'
       });
+    } else {
+      // Aktifkan notifikasi
+      const granted = await requestNotificationPermission();
+      if (granted) {
+        setNotifPermission('granted');
+        setNotifEnabled(true);
+        localStorage.setItem('notif_enabled', 'true');
+        // Kirim notifikasi konfirmasi
+        sendNotification('Notifikasi Aktif! 🔔', {
+          body: 'Anda akan mendapat notifikasi saat komik yang di-bookmark mendapat update chapter baru.',
+          tag: 'permission-granted'
+        });
+      }
     }
   };
 
@@ -133,13 +150,13 @@ export default function Page() {
           <div className="flex items-center gap-3">
             <button
               onClick={handleRequestPermission}
-              className={`p-2.5 rounded-2xl border transition-all shadow-sm ${notifPermission === 'granted'
+              className={`p-2.5 rounded-2xl border transition-all shadow-sm ${notifPermission === 'granted' && notifEnabled
                 ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400'
                 : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-500 hover:bg-neutral-50 dark:hover:bg-neutral-800'
                 }`}
-              title={notifPermission === 'granted' ? 'Notifications enabled' : 'Enable notifications'}
+              title={notifPermission === 'granted' && notifEnabled ? 'Nonaktifkan notifikasi' : 'Aktifkan notifikasi'}
             >
-              {notifPermission === 'granted' ? (
+              {notifPermission === 'granted' && notifEnabled ? (
                 <BellRing className="w-5 h-5 shadow-sm" />
               ) : (
                 <Bell className="w-5 h-5" />
