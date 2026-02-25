@@ -10,9 +10,40 @@ export default function BookmarksPage() {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const saved = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-        setBookmarks(saved);
-        setLoading(false);
+        const fetchBookmarks = async () => {
+            const saved = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+            
+            // Fetch fresh data untuk setiap bookmark
+            const freshBookmarks = await Promise.all(
+                saved.map(async (bookmark) => {
+                    try {
+                        const res = await fetch(`https://unofficial-komikcast-api.vercel.app/series/${bookmark.data.slug}`);
+                        if (res.ok) {
+                            const freshData = await res.json();
+                            return {
+                                id: bookmark.id,
+                                data: {
+                                    title: freshData.data.title,
+                                    slug: freshData.data.slug,
+                                    coverImage: freshData.data.coverImage,
+                                    format: freshData.data.format,
+                                    rating: freshData.data.rating
+                                }
+                            };
+                        }
+                    } catch (err) {
+                        console.error(`Failed to fetch ${bookmark.data.slug}:`, err);
+                    }
+                    // Fallback ke data lama jika fetch gagal
+                    return bookmark;
+                })
+            );
+            
+            setBookmarks(freshBookmarks);
+            setLoading(false);
+        };
+        
+        fetchBookmarks();
     }, []);
 
     const removeBookmark = (e, id) => {
@@ -70,7 +101,6 @@ export default function BookmarksPage() {
                                             fill
                                             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
-                                            referrerPolicy="no-referrer"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
 
@@ -90,7 +120,6 @@ export default function BookmarksPage() {
                                                             width={24}
                                                             height={24}
                                                             className="object-contain"
-                                                            referrerPolicy="no-referrer"
                                                         />
                                                     </div>
                                                 </div>
