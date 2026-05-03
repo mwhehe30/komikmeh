@@ -176,7 +176,7 @@ export default function Page() {
   return (
     <main className="min-h-screen bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-        <header className="mb-10 flex flex-col items-center justify-between gap-4">
+        <header className="mb-10 flex items-center justify-between gap-4">
           <h1 className="text-4xl font-extrabold tracking-tight inline-block text-white">
             Latest
           </h1>
