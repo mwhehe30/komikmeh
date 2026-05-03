@@ -74,11 +74,11 @@ export default function Page() {
         const bData = {
           id: item.id,
           data: {
-            title: item.data.title,
-            slug: item.data.slug,
-            coverImage: item.data.coverImage,
-            format: item.data.format,
-            rating: item.data.rating
+            title: item.data?.title || item.title,
+            slug: item.data?.slug || item.slug,
+            coverImage: item.data?.coverImage || item.coverImage,
+            format: item.data?.format || item.format,
+            rating: item.data?.rating || item.rating
           }
         };
         next = [bData, ...prev];
@@ -119,10 +119,39 @@ export default function Page() {
     }
   };
 
-  // load pertama
+  // Restore state from sessionStorage on mount
   React.useEffect(() => {
-    loadMore();
+    const savedState = sessionStorage.getItem('home_page_state');
+    if (savedState) {
+      const { series: savedSeries, offset: savedOffset, hasMore: savedHasMore, scrollPos } = JSON.parse(savedState);
+      setSeries(savedSeries);
+      setOffset(savedOffset);
+      setHasMore(savedHasMore);
+      
+      // Restore scroll position with retries to ensure content is rendered
+      const restoreScroll = (retryCount = 0) => {
+        window.scrollTo({ top: scrollPos, behavior: 'instant' });
+        // If we haven't reached the position and the page might still be rendering
+        if (Math.abs(window.scrollY - scrollPos) > 10 && retryCount < 20) {
+          setTimeout(() => restoreScroll(retryCount + 1), 100);
+        }
+      };
+      setTimeout(restoreScroll, 100);
+    } else {
+      loadMore();
+    }
   }, []);
+
+  // Save state to sessionStorage
+  const saveState = () => {
+    const state = {
+      series,
+      offset,
+      hasMore,
+      scrollPos: window.scrollY
+    };
+    sessionStorage.setItem('home_page_state', JSON.stringify(state));
+  };
 
   // infinite scroll observer
   React.useEffect(() => {
@@ -166,18 +195,6 @@ export default function Page() {
                 <Bell className="w-5 h-5" />
               )}
             </button>
-            <Link
-              href="/bookmarks"
-              className="flex items-center gap-2 px-5 py-2.5 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-all shadow-sm"
-            >
-              <Bookmark className="w-4 h-4 text-purple-500" />
-              <span>My Bookmarks</span>
-              {bookmarks.length > 0 && (
-                <span className="bg-purple-600 text-white text-[10px] px-1.5 py-0.5 rounded-full ml-1">
-                  {bookmarks.length}
-                </span>
-              )}
-            </Link>
           </div>
         </header>
 
@@ -187,11 +204,14 @@ export default function Page() {
               key={item.id}
               className="group relative flex flex-col bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 ease-in-out border border-neutral-200 dark:border-neutral-800"
             >
-              <Link href={`/series/${item.data.slug}`}>
+              <Link 
+                href={`/series/${item.data?.slug || item.slug}`}
+                onClick={saveState}
+              >
                 <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-200 dark:bg-neutral-800">
                   <Image
-                    src={item.data.coverImage}
-                    alt={item.data.title}
+                    src={item.data?.coverImage || item.coverImage}
+                    alt={item.data?.title || item.title}
                     fill
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
@@ -200,17 +220,17 @@ export default function Page() {
 
                   {/* Badges */}
                   <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
-                    {item.data.format && (
+                    {(item.data?.format || item.format) && (
                       <div className="flex items-center gap-1.5">
                         <div className="relative w-6 h-6 rounded-md overflow-hidden shadow-sm backdrop-blur-md bg-black/20 flex items-center justify-center p-0.5 border border-white/10 group/flag translate-y-0 hover:-translate-y-0.5 transition-transform duration-300">
                           <Image
                             src={
-                              item.data.format.toLowerCase().trim() === 'webtoon' ||
-                                item.data.format.toLowerCase().trim() === 'manga'
+                              (item.data?.format || item.format).toLowerCase().trim() === 'webtoon' ||
+                                (item.data?.format || item.format).toLowerCase().trim() === 'manga'
                                 ? '/manga.svg'
-                                : `/${item.data.format.toLowerCase().trim()}.svg`
+                                : `/${(item.data?.format || item.format).toLowerCase().trim()}.svg`
                             }
-                            alt={item.data.format}
+                            alt={item.data?.format || item.format}
                             width={24}
                             height={24}
                             className="object-contain"
@@ -240,11 +260,11 @@ export default function Page() {
                     />
                   </button>
 
-                  {item.data.rating && (
+                  {(item.data?.rating || item.rating) && (
                     <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 bg-black/60 backdrop-blur-md rounded-md shadow-sm z-10">
                       <Star className="w-3 h-3 text-yellow-400 fill-current" />
                       <span className="text-[11px] font-medium text-white">
-                        {item.data.rating}
+                        {item.data?.rating || item.rating}
                       </span>
                     </div>
                   )}
@@ -253,16 +273,17 @@ export default function Page() {
                 <div className="flex flex-col flex-1 p-3.5 z-20 bg-white dark:bg-neutral-900">
                   <h3
                     className="font-bold text-neutral-900 dark:text-neutral-100 text-sm line-clamp-2 mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors"
-                    title={item.data.title}
+                    title={item.data?.title || item.title}
                   >
-                    {item.data.title}
+                    {item.data?.title || item.title}
                   </h3>
                 </div>
               </Link>
               {item.chapters && item.chapters.length > 0 && (
                 <div className="px-3.5 pb-3.5 z-20 bg-white dark:bg-neutral-900 mt-auto">
                   <Link
-                    href={`/series/${item.data.slug}/chapter/${item.chapters[0].chapterIndex}`}
+                    href={`/series/${item.data?.slug || item.slug}/chapter/${item.chapters[0].chapterIndex}`}
+                    onClick={saveState}
                     className="flex justify-between items-center px-3 py-2 rounded-xl bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800/80 dark:hover:bg-neutral-700 transition-colors border border-neutral-100 dark:border-neutral-700/50"
                   >
                     <span className="text-xs font-bold text-neutral-700 dark:text-neutral-200 line-clamp-1 mr-2">

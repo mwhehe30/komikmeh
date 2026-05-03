@@ -1,6 +1,7 @@
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import NotificationHandler from '@/components/NotificationHandler';
+import Bottombar from '@/components/Bottombar';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta-sans',
@@ -40,6 +41,7 @@ const RootLayout = ({ children }) => {
       <body className={`${plusJakartaSans.variable} antialiased`}>
         <NotificationHandler>
           {children}
+          <Bottombar />
         </NotificationHandler>
       </body>
     </html>

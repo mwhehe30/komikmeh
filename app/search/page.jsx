@@ -1,0 +1,391 @@
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { searchSeries, getGenres } from '@/lib/api';
+import Link from 'next/link';
+import Image from 'next/image';
+import { Star, Bookmark, Search, X, Filter as FilterIcon, ChevronDown, Check } from 'lucide-react';
+import SkeletonCard from '@/components/SkeletonCard';
+
+export default function SearchPage() {
+  const TAKE = 18;
+
+  const [query, setQuery] = useState('');
+  const [showFilters, setShowFilters] = useState(false);
+  
+  // Filter states
+  const [genres, setGenres] = useState([]);
+  const [selectedGenres, setSelectedGenres] = useState([]);
+  const [selectedStatus, setSelectedStatus] = useState('');
+  const [selectedType, setSelectedType] = useState('');
+
+  const [results, setResults] = useState([]);
+  const [offset, setOffset] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [bookmarks, setBookmarks] = useState([]);
+  const [isRestored, setIsRestored] = useState(false);
+  
+  const observerRef = useRef(null);
+
+  useEffect(() => {
+    const fetchInitialData = async () => {
+      try {
+        const res = await getGenres();
+        setGenres(res.data || []);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchInitialData();
+
+    const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+    setBookmarks(savedBookmarks);
+
+    // Restore state from sessionStorage
+    const savedState = sessionStorage.getItem('explore_page_state');
+    if (savedState) {
+      const { 
+        query: sQuery, 
+        selectedGenres: sGenres, 
+        selectedStatus: sStatus, 
+        selectedType: sType,
+        results: sResults,
+        offset: sOffset,
+        hasMore: sHasMore,
+        scrollPos 
+      } = JSON.parse(savedState);
+      
+      setQuery(sQuery);
+      setSelectedGenres(sGenres);
+      setSelectedStatus(sStatus);
+      setSelectedType(sType);
+      setResults(sResults);
+      setOffset(sOffset);
+      setHasMore(sHasMore);
+      setIsRestored(true);
+
+      // Restore scroll position with retries
+      const restoreScroll = (retryCount = 0) => {
+        window.scrollTo({ top: scrollPos, behavior: 'instant' });
+        if (Math.abs(window.scrollY - scrollPos) > 10 && retryCount < 20) {
+          setTimeout(() => restoreScroll(retryCount + 1), 100);
+        }
+      };
+      setTimeout(restoreScroll, 100);
+    } else {
+      handleSearch();
+    }
+  }, []);
+
+  // Save state to sessionStorage
+  const saveState = () => {
+    const state = {
+      query,
+      selectedGenres,
+      selectedStatus,
+      selectedType,
+      results,
+      offset,
+      hasMore,
+      scrollPos: window.scrollY
+    };
+    sessionStorage.setItem('explore_page_state', JSON.stringify(state));
+  };
+
+  const toggleBookmark = (e, item) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setBookmarks((prev) => {
+      const isBookmarked = prev.some((b) => b.id === item.id);
+      let next;
+      if (isBookmarked) {
+        next = prev.filter((b) => b.id !== item.id);
+      } else {
+        const bData = {
+          id: item.id,
+          data: {
+            title: item.data?.title || item.title,
+            slug: item.data?.slug || item.slug,
+            coverImage: item.data?.coverImage || item.coverImage,
+            format: item.data?.format || item.format,
+            rating: item.data?.rating || item.rating
+          }
+        };
+        next = [bData, ...prev];
+      }
+      localStorage.setItem('bookmarks', JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const toggleGenre = (genreName) => {
+    setSelectedGenres((prev) =>
+      prev.includes(genreName)
+        ? prev.filter((g) => g !== genreName)
+        : [...prev, genreName]
+    );
+  };
+
+  const handleSearch = async (e) => {
+    if (e) e.preventDefault();
+
+    setLoading(true);
+    setOffset(0);
+    setResults([]);
+    
+    try {
+      const filters = {
+        genres: selectedGenres,
+        status: selectedStatus,
+        type: selectedType
+      };
+      const res = await searchSeries(query, 0, TAKE, filters);
+      setResults(res.data);
+      setOffset(TAKE);
+      setHasMore(res.hasMore);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Auto-search when filters change (but not immediately on query change to avoid too many requests)
+  useEffect(() => {
+    if (isRestored) {
+      setIsRestored(false);
+      return;
+    }
+    handleSearch();
+  }, [selectedGenres, selectedStatus, selectedType]);
+
+  const loadMore = async () => {
+    if (loading || !hasMore) return;
+
+    setLoading(true);
+    try {
+      const filters = {
+        genres: selectedGenres,
+        status: selectedStatus,
+        type: selectedType
+      };
+      const res = await searchSeries(query, offset, TAKE, filters);
+      setResults((prev) => {
+        const map = new Map();
+        prev.forEach((item) => map.set(item.id, item));
+        res.data.forEach((item) => map.set(item.id, item));
+        return Array.from(map.values());
+      });
+      setOffset((prev) => prev + TAKE);
+      setHasMore(res.hasMore);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          loadMore();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [offset, hasMore, loading, query]);
+
+  return (
+    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50 pb-24">
+      <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+        <header className="mb-8 space-y-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl font-extrabold tracking-tight">Explore</h1>
+            <button
+              onClick={() => setShowFilters(!showFilters)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
+                showFilters || selectedGenres.length > 0 || selectedStatus || selectedType
+                  ? 'bg-purple-600 border-purple-600 text-white shadow-lg shadow-purple-500/20'
+                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
+              }`}
+            >
+              <FilterIcon className="w-4 h-4" />
+              <span className="text-sm font-bold">Filters</span>
+              {(selectedGenres.length > 0 || selectedStatus || selectedType) && (
+                <span className="flex items-center justify-center w-5 h-5 bg-white text-purple-600 rounded-full text-[10px] font-black">
+                  {(selectedGenres.length > 0 ? 1 : 0) + (selectedStatus ? 1 : 0) + (selectedType ? 1 : 0)}
+                </span>
+              )}
+            </button>
+          </div>
+          
+          <form onSubmit={handleSearch} className="relative group">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-neutral-400 group-focus-within:text-purple-500 transition-colors">
+              <Search className="w-5 h-5" />
+            </div>
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Search for titles, authors, genres..."
+              className="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl py-4 pl-12 pr-12 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all shadow-sm group-hover:border-neutral-300 dark:group-hover:border-neutral-700"
+            />
+            {query && (
+              <button
+                type="button"
+                onClick={() => { setQuery(''); setTimeout(handleSearch, 0); }}
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
+          </form>
+
+          {/* Collapsible Filter Section */}
+          {showFilters && (
+            <div className="space-y-6 bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 shadow-xl animate-in slide-in-from-top-4 duration-300">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-neutral-500">Status</label>
+                  <div className="relative">
+                    <select
+                      value={selectedStatus}
+                      onChange={(e) => setSelectedStatus(e.target.value)}
+                      className="w-full appearance-none bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    >
+                      <option value="">All Status</option>
+                      <option value="Ongoing">Ongoing</option>
+                      <option value="Completed">Completed</option>
+                      <option value="Hiatus">Hiatus</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
+                  </div>
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs font-bold uppercase tracking-wider text-neutral-500">Type</label>
+                  <div className="relative">
+                    <select
+                      value={selectedType}
+                      onChange={(e) => setSelectedType(e.target.value)}
+                      className="w-full appearance-none bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                    >
+                      <option value="">All Types</option>
+                      <option value="Manga">Manga</option>
+                      <option value="Manhwa">Manhwa</option>
+                      <option value="Manhua">Manhua</option>
+                    </select>
+                    <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400 pointer-events-none" />
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                <label className="text-xs font-bold uppercase tracking-wider text-neutral-500">Genres</label>
+                <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-800">
+                  {genres.map((genre) => (
+                    <button
+                      key={genre.id}
+                      onClick={() => toggleGenre(genre.name)}
+                      className={`px-4 py-2 rounded-full text-xs font-medium transition-all border ${
+                        selectedGenres.includes(genre.name)
+                          ? 'bg-purple-600 border-purple-600 text-white shadow-md shadow-purple-500/20'
+                          : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-purple-300 dark:hover:border-purple-700'
+                      }`}
+                    >
+                      {genre.name}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+                <button
+                  onClick={() => {
+                    setSelectedGenres([]);
+                    setSelectedStatus('');
+                    setSelectedType('');
+                  }}
+                  className="px-4 py-2 text-sm font-bold text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                >
+                  Reset
+                </button>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="px-6 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-90 transition-all"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          )}
+        </header>
+
+        {results.length > 0 ? (
+          <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4 sm:gap-6">
+            {results.map((item) => (
+              <li
+                key={item.id}
+                className="group relative flex flex-col bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 ease-in-out border border-neutral-200 dark:border-neutral-800"
+              >
+                <Link 
+                  href={`/series/${item.data?.slug || item.slug}`}
+                  onClick={saveState}
+                >
+                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-200 dark:bg-neutral-800">
+                    <Image
+                      src={item.data?.coverImage || item.coverImage}
+                      alt={item.data?.title || item.title}
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+                    
+                    {/* Bookmark Button */}
+                    <button
+                      onClick={(e) => toggleBookmark(e, item)}
+                      className="absolute top-2 right-2 z-20 p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60 transition-all"
+                    >
+                      <Bookmark
+                        className={`w-4 h-4 transition-all ${bookmarks.some(b => b.id === item.id) ? 'fill-purple-500 text-purple-500 scale-110' : 'text-white'}`}
+                      />
+                    </button>
+
+                    {(item.data?.rating || item.rating) && (
+                      <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 bg-black/60 backdrop-blur-md rounded-md shadow-sm">
+                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
+                        <span className="text-[11px] font-medium text-white">{item.data?.rating || item.rating}</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="p-3.5">
+                    <h3 className="font-bold text-neutral-900 dark:text-neutral-100 text-sm line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                      {item.data?.title || item.title}
+                    </h3>
+                  </div>
+                </Link>
+              </li>
+            ))}
+            {loading && Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={`skeleton-${i}`} />)}
+          </ul>
+        ) : !loading && (
+          <div className="flex flex-col items-center justify-center py-20 text-center">
+            <Search className="w-12 h-12 text-neutral-300 mb-4" />
+            <p className="text-neutral-500">No results found</p>
+          </div>
+        )}
+
+        <div ref={observerRef} className="h-10 w-full mt-4" />
+      </div>
+    </main>
+  );
+}
