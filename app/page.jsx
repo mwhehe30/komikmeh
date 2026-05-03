@@ -47,10 +47,10 @@ export default function Page() {
         setNotifPermission('granted');
         setNotifEnabled(true);
         localStorage.setItem('notif_enabled', 'true');
-        
+
         // Tunggu sebentar untuk memastikan SW ready (penting untuk mobile)
         await new Promise(resolve => setTimeout(resolve, 500));
-        
+
         // Kirim notifikasi konfirmasi
         await sendNotification('Notifikasi Aktif!', {
           body: 'Anda akan mendapat notifikasi saat komik yang di-bookmark mendapat update chapter baru.',
@@ -127,7 +127,7 @@ export default function Page() {
       setSeries(savedSeries);
       setOffset(savedOffset);
       setHasMore(savedHasMore);
-      
+
       // Restore scroll position with retries to ensure content is rendered
       const restoreScroll = (retryCount = 0) => {
         window.scrollTo({ top: scrollPos, behavior: 'instant' });
@@ -174,18 +174,18 @@ export default function Page() {
   }, [offset, hasMore, loading]);
 
   return (
-    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50">
+    <main className="min-h-screen bg-black text-white">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-10 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <h1 className="text-4xl font-extrabold tracking-tight inline-block">
-            Latest Series
+          <h1 className="text-4xl font-extrabold tracking-tight inline-block text-white">
+            Latest
           </h1>
           <div className="flex items-center gap-3">
             <button
               onClick={handleRequestPermission}
               className={`p-2.5 rounded-2xl border transition-all shadow-sm ${notifPermission === 'granted' && notifEnabled
-                ? 'bg-purple-50 dark:bg-purple-900/20 border-purple-200 dark:border-purple-800 text-purple-600 dark:text-purple-400'
-                : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-500 hover:bg-neutral-50 dark:hover:bg-neutral-800'
+                ? 'bg-amber-400/10 border-amber-400/30 text-amber-400'
+                : 'bg-neutral-900 border-neutral-800 text-neutral-400 hover:bg-neutral-800'
                 }`}
               title={notifPermission === 'granted' && notifEnabled ? 'Nonaktifkan notifikasi' : 'Aktifkan notifikasi'}
             >
@@ -202,13 +202,13 @@ export default function Page() {
           {series.map((item) => (
             <li
               key={item.id}
-              className="group relative flex flex-col bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 ease-in-out border border-neutral-200 dark:border-neutral-800"
+              className="group relative flex flex-col bg-neutral-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-amber-400/5 transition-all duration-300 ease-in-out border border-neutral-800 hover:border-neutral-700"
             >
-              <Link 
+              <Link
                 href={`/series/${item.data?.slug || item.slug}`}
                 onClick={saveState}
               >
-                <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-200 dark:bg-neutral-800">
+                <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-800">
                   <Image
                     src={item.data?.coverImage || item.coverImage}
                     alt={item.data?.title || item.title}
@@ -216,13 +216,13 @@ export default function Page() {
                     sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 
                   {/* Badges */}
                   <div className="absolute top-2 left-2 flex flex-col gap-1.5 z-10">
                     {(item.data?.format || item.format) && (
                       <div className="flex items-center gap-1.5">
-                        <div className="relative w-6 h-6 rounded-md overflow-hidden shadow-sm backdrop-blur-md bg-black/20 flex items-center justify-center p-0.5 border border-white/10 group/flag translate-y-0 hover:-translate-y-0.5 transition-transform duration-300">
+                        <div className="relative w-6 h-6 rounded-md overflow-hidden shadow-sm backdrop-blur-md bg-black/40 flex items-center justify-center p-0.5 border border-white/10 group/flag translate-y-0 hover:-translate-y-0.5 transition-transform duration-300">
                           <Image
                             src={
                               (item.data?.format || item.format).toLowerCase().trim() === 'webtoon' ||
@@ -239,7 +239,7 @@ export default function Page() {
                         {item.chapters?.[0] &&
                           new Date() - new Date(item.chapters[0].updatedAt) <
                           24 * 60 * 60 * 1000 && (
-                            <span className="px-1.5 py-0.5 text-[9px] font-black text-white bg-red-600 rounded-md shadow-[0_0_10px_rgba(220,38,38,0.5)] animate-pulse">
+                            <span className="px-1.5 py-0.5 text-[9px] font-black text-black bg-amber-400 rounded-md shadow-[0_0_10px_rgba(251,191,36,0.5)] animate-pulse">
                               UP
                             </span>
                           )}
@@ -249,30 +249,30 @@ export default function Page() {
                   {/* Bookmark Button */}
                   <button
                     onClick={(e) => toggleBookmark(e, item)}
-                    className="absolute top-2 right-2 z-20 p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60 transition-all group/bookmark"
+                    className="absolute top-2 right-2 z-20 p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white hover:bg-black/80 transition-all group/bookmark"
                     title={bookmarks.some(b => b.id === item.id) ? "Remove from bookmarks" : "Add to bookmarks"}
                   >
                     <Bookmark
                       className={`w-4 h-4 transition-all ${bookmarks.some(b => b.id === item.id)
-                        ? 'fill-purple-500 text-purple-500 scale-110'
+                        ? 'fill-amber-400 text-amber-400 scale-110'
                         : 'text-white group-hover/bookmark:scale-110'
                         }`}
                     />
                   </button>
 
                   {(item.data?.rating || item.rating) && (
-                    <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 bg-black/60 backdrop-blur-md rounded-md shadow-sm z-10">
-                      <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                      <span className="text-[11px] font-medium text-white">
+                    <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 bg-black/80 backdrop-blur-md rounded-md shadow-sm z-10">
+                      <Star className="w-3 h-3 text-amber-400 fill-current" />
+                      <span className="text-[11px] font-bold text-white">
                         {item.data?.rating || item.rating}
                       </span>
                     </div>
                   )}
                 </div>
 
-                <div className="flex flex-col flex-1 p-3.5 z-20 bg-white dark:bg-neutral-900">
+                <div className="flex flex-col flex-1 p-3.5 z-20 bg-neutral-900">
                   <h3
-                    className="font-bold text-neutral-900 dark:text-neutral-100 text-sm line-clamp-2 mb-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors"
+                    className="font-bold text-neutral-100 text-sm line-clamp-2 mb-2 group-hover:text-amber-400 transition-colors"
                     title={item.data?.title || item.title}
                   >
                     {item.data?.title || item.title}
@@ -280,19 +280,19 @@ export default function Page() {
                 </div>
               </Link>
               {item.chapters && item.chapters.length > 0 && (
-                <div className="px-3.5 pb-3.5 z-20 bg-white dark:bg-neutral-900 mt-auto">
+                <div className="px-3.5 pb-3.5 z-20 bg-neutral-900 mt-auto">
                   <Link
                     href={`/series/${item.data?.slug || item.slug}/chapter/${item.chapters[0].chapterIndex}`}
                     onClick={saveState}
-                    className="flex justify-between items-center px-3 py-2 rounded-xl bg-neutral-50 hover:bg-neutral-100 dark:bg-neutral-800/80 dark:hover:bg-neutral-700 transition-colors border border-neutral-100 dark:border-neutral-700/50"
+                    className="flex justify-between items-center px-3 py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 transition-colors border border-neutral-700/50"
                   >
-                    <span className="text-xs font-bold text-neutral-700 dark:text-neutral-200 line-clamp-1 mr-2">
+                    <span className="text-xs font-bold text-neutral-200 line-clamp-1 mr-2">
                       Ch. {item.chapters[0].chapterIndex}
                     </span>
                     {item.chapters[0] &&
                       new Date() - new Date(item.chapters[0].updatedAt) <
                       24 * 60 * 60 * 1000 && (
-                        <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 bg-purple-100 dark:bg-purple-900/30 px-1.5 py-0.5 rounded shrinks-0">
+                        <span className="text-[10px] font-bold text-black bg-amber-400 px-1.5 py-0.5 rounded shrink-0">
                           New
                         </span>
                       )}
@@ -313,8 +313,8 @@ export default function Page() {
           className="h-10 w-full mt-4 flex items-center justify-center"
         >
           {!loading && !hasMore && series.length > 0 && (
-            <div className="px-5 py-2.5 rounded-full bg-neutral-100 dark:bg-neutral-800/50 border border-neutral-200 dark:border-neutral-800">
-              <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400">
+            <div className="px-5 py-2.5 rounded-full bg-neutral-900 border border-neutral-800">
+              <p className="text-sm font-medium text-neutral-400">
                 Semua komik telah ditampilkan
               </p>
             </div>

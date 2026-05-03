@@ -205,23 +205,23 @@ export default function SearchPage() {
   }, [offset, hasMore, loading, query]);
 
   return (
-    <main className="min-h-screen bg-neutral-50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50 pb-24">
+    <main className="min-h-screen bg-black text-white pb-24">
       <div className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
         <header className="mb-8 space-y-4">
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-extrabold tracking-tight">Explore</h1>
+            <h1 className="text-3xl font-extrabold tracking-tight text-white">Explore</h1>
             <button
               onClick={() => setShowFilters(!showFilters)}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl border transition-all ${
                 showFilters || selectedGenres.length > 0 || selectedStatus || selectedType
-                  ? 'bg-purple-600 border-purple-600 text-white shadow-lg shadow-purple-500/20'
-                  : 'bg-white dark:bg-neutral-900 border-neutral-200 dark:border-neutral-800 text-neutral-600 dark:text-neutral-400'
+                  ? 'bg-amber-400 border-amber-400 text-black shadow-lg shadow-amber-400/20'
+                  : 'bg-neutral-900 border-neutral-800 text-neutral-400'
               }`}
             >
               <FilterIcon className="w-4 h-4" />
               <span className="text-sm font-bold">Filters</span>
               {(selectedGenres.length > 0 || selectedStatus || selectedType) && (
-                <span className="flex items-center justify-center w-5 h-5 bg-white text-purple-600 rounded-full text-[10px] font-black">
+                <span className="flex items-center justify-center w-5 h-5 bg-black text-amber-400 rounded-full text-[10px] font-black">
                   {(selectedGenres.length > 0 ? 1 : 0) + (selectedStatus ? 1 : 0) + (selectedType ? 1 : 0)}
                 </span>
               )}
@@ -229,7 +229,7 @@ export default function SearchPage() {
           </div>
           
           <form onSubmit={handleSearch} className="relative group">
-            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-neutral-400 group-focus-within:text-purple-500 transition-colors">
+            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-neutral-400 group-focus-within:text-amber-400 transition-colors">
               <Search className="w-5 h-5" />
             </div>
             <input
@@ -237,13 +237,13 @@ export default function SearchPage() {
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search for titles, authors, genres..."
-              className="w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl py-4 pl-12 pr-12 focus:ring-2 focus:ring-purple-500 focus:border-transparent outline-none transition-all shadow-sm group-hover:border-neutral-300 dark:group-hover:border-neutral-700"
+              className="w-full bg-neutral-900 border border-neutral-800 rounded-2xl py-4 pl-12 pr-12 focus:ring-2 focus:ring-amber-400 focus:border-transparent outline-none transition-all shadow-sm group-hover:border-neutral-700 text-white placeholder:text-neutral-500"
             />
             {query && (
               <button
                 type="button"
                 onClick={() => { setQuery(''); setTimeout(handleSearch, 0); }}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200"
+                className="absolute inset-y-0 right-0 pr-4 flex items-center text-neutral-400 hover:text-white"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -252,7 +252,7 @@ export default function SearchPage() {
 
           {/* Collapsible Filter Section */}
           {showFilters && (
-            <div className="space-y-6 bg-white dark:bg-neutral-900 p-6 rounded-3xl border border-neutral-200 dark:border-neutral-800 shadow-xl animate-in slide-in-from-top-4 duration-300">
+            <div className="space-y-6 bg-neutral-900 p-6 rounded-3xl border border-neutral-800 shadow-2xl animate-in slide-in-from-top-4 duration-300">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <label className="text-xs font-bold uppercase tracking-wider text-neutral-500">Status</label>
@@ -260,7 +260,7 @@ export default function SearchPage() {
                     <select
                       value={selectedStatus}
                       onChange={(e) => setSelectedStatus(e.target.value)}
-                      className="w-full appearance-none bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                      className="w-full appearance-none bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                     >
                       <option value="">All Status</option>
                       <option value="Ongoing">Ongoing</option>
@@ -276,7 +276,7 @@ export default function SearchPage() {
                     <select
                       value={selectedType}
                       onChange={(e) => setSelectedType(e.target.value)}
-                      className="w-full appearance-none bg-neutral-50 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl px-4 py-2.5 text-sm outline-none focus:ring-2 focus:ring-purple-500 transition-all"
+                      className="w-full appearance-none bg-neutral-800 border border-neutral-700 rounded-xl px-4 py-2.5 text-sm text-white outline-none focus:ring-2 focus:ring-amber-400 transition-all"
                     >
                       <option value="">All Types</option>
                       <option value="Manga">Manga</option>
@@ -290,15 +290,15 @@ export default function SearchPage() {
 
               <div className="space-y-3">
                 <label className="text-xs font-bold uppercase tracking-wider text-neutral-500">Genres</label>
-                <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-neutral-200 dark:scrollbar-thumb-neutral-800">
+                <div className="flex flex-wrap gap-2 max-h-48 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-neutral-800">
                   {genres.map((genre) => (
                     <button
                       key={genre.id}
                       onClick={() => toggleGenre(genre.name)}
                       className={`px-4 py-2 rounded-full text-xs font-medium transition-all border ${
                         selectedGenres.includes(genre.name)
-                          ? 'bg-purple-600 border-purple-600 text-white shadow-md shadow-purple-500/20'
-                          : 'bg-neutral-50 dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 text-neutral-600 dark:text-neutral-400 hover:border-purple-300 dark:hover:border-purple-700'
+                          ? 'bg-amber-400 border-amber-400 text-black shadow-md shadow-amber-400/20'
+                          : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-amber-400/50 hover:text-white'
                       }`}
                     >
                       {genre.name}
@@ -307,20 +307,20 @@ export default function SearchPage() {
                 </div>
               </div>
 
-              <div className="flex justify-end gap-3 pt-2 border-t border-neutral-100 dark:border-neutral-800">
+              <div className="flex justify-end gap-3 pt-2 border-t border-neutral-800">
                 <button
                   onClick={() => {
                     setSelectedGenres([]);
                     setSelectedStatus('');
                     setSelectedType('');
                   }}
-                  className="px-4 py-2 text-sm font-bold text-neutral-500 hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors"
+                  className="px-4 py-2 text-sm font-bold text-neutral-500 hover:text-white transition-colors"
                 >
                   Reset
                 </button>
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="px-6 py-2 bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 rounded-xl text-sm font-bold hover:opacity-90 transition-all"
+                  className="px-6 py-2 bg-white text-black rounded-xl text-sm font-bold hover:bg-neutral-200 transition-all"
                 >
                   Done
                 </button>
@@ -334,13 +334,13 @@ export default function SearchPage() {
             {results.map((item) => (
               <li
                 key={item.id}
-                className="group relative flex flex-col bg-white dark:bg-neutral-900 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 ease-in-out border border-neutral-200 dark:border-neutral-800"
+                className="group relative flex flex-col bg-neutral-900 rounded-2xl overflow-hidden shadow-lg hover:shadow-amber-400/5 transition-all duration-300 ease-in-out border border-neutral-800 hover:border-neutral-700"
               >
                 <Link 
                   href={`/series/${item.data?.slug || item.slug}`}
                   onClick={saveState}
                 >
-                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-200 dark:bg-neutral-800">
+                  <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-800">
                     <Image
                       src={item.data?.coverImage || item.coverImage}
                       alt={item.data?.title || item.title}
@@ -348,27 +348,27 @@ export default function SearchPage() {
                       sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-300" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
                     
                     {/* Bookmark Button */}
                     <button
                       onClick={(e) => toggleBookmark(e, item)}
-                      className="absolute top-2 right-2 z-20 p-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 text-white hover:bg-black/60 transition-all"
+                      className="absolute top-2 right-2 z-20 p-2 rounded-full bg-black/60 backdrop-blur-md border border-white/10 text-white hover:bg-black/80 transition-all"
                     >
                       <Bookmark
-                        className={`w-4 h-4 transition-all ${bookmarks.some(b => b.id === item.id) ? 'fill-purple-500 text-purple-500 scale-110' : 'text-white'}`}
+                        className={`w-4 h-4 transition-all ${bookmarks.some(b => b.id === item.id) ? 'fill-amber-400 text-amber-400 scale-110' : 'text-white'}`}
                       />
                     </button>
 
                     {(item.data?.rating || item.rating) && (
-                      <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 bg-black/60 backdrop-blur-md rounded-md shadow-sm">
-                        <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                        <span className="text-[11px] font-medium text-white">{item.data?.rating || item.rating}</span>
+                      <div className="absolute bottom-2 left-2 flex items-center gap-1 px-1.5 py-0.5 bg-black/80 backdrop-blur-md rounded-md shadow-sm">
+                        <Star className="w-3 h-3 text-amber-400 fill-current" />
+                        <span className="text-[11px] font-bold text-white">{item.data?.rating || item.rating}</span>
                       </div>
                     )}
                   </div>
                   <div className="p-3.5">
-                    <h3 className="font-bold text-neutral-900 dark:text-neutral-100 text-sm line-clamp-2 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                    <h3 className="font-bold text-neutral-100 text-sm line-clamp-2 group-hover:text-amber-400 transition-colors">
                       {item.data?.title || item.title}
                     </h3>
                   </div>
@@ -379,7 +379,7 @@ export default function SearchPage() {
           </ul>
         ) : !loading && (
           <div className="flex flex-col items-center justify-center py-20 text-center">
-            <Search className="w-12 h-12 text-neutral-300 mb-4" />
+            <Search className="w-12 h-12 text-neutral-700 mb-4" />
             <p className="text-neutral-500">No results found</p>
           </div>
         )}

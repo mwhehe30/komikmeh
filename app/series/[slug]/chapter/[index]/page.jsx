@@ -91,8 +91,8 @@ const Page = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-neutral-400">
-        <div className="w-8 h-8 rounded-full border-4 border-purple-500 border-t-transparent animate-spin mb-4"></div>
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-neutral-400">
+        <div className="w-8 h-8 rounded-full border-4 border-amber-400 border-t-transparent animate-spin mb-4"></div>
         <p>Loading Chapter...</p>
       </div>
     );
@@ -100,11 +100,11 @@ const Page = () => {
 
   if (!chapterDetail || !chapterDetail.data?.images) {
     return (
-      <div className="min-h-screen bg-neutral-950 flex flex-col items-center justify-center text-neutral-50 gap-4">
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white gap-4">
         <h1 className="text-2xl font-bold">Chapter Not Found</h1>
         <Link
           href={`/series/${slug}`}
-          className="px-6 py-2 bg-purple-600 text-white rounded-full font-medium hover:bg-purple-700 transition"
+          className="px-6 py-2 bg-amber-400 text-black rounded-full font-bold hover:bg-amber-500 transition"
         >
           Back to Series
         </Link>
@@ -131,10 +131,10 @@ const Page = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-neutral-300">
+    <div className="min-h-screen bg-black text-neutral-300">
       {/* Sticky Header */}
       <header
-        className={`fixed top-0 left-0 right-0 z-50 bg-[#0f0f0f]/90 backdrop-blur-md border-b border-neutral-800/50 shadow-sm transition-transform duration-300 ${showNav ? 'translate-y-0' : '-translate-y-full'}`}
+        className={`fixed top-0 left-0 right-0 z-50 bg-black/90 backdrop-blur-md border-b border-neutral-800 transition-transform duration-300 ${showNav ? 'translate-y-0' : '-translate-y-full'}`}
       >
         <div className="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
           <Link
@@ -147,7 +147,7 @@ const Page = () => {
             </span>
           </Link>
           <div className="text-center truncate px-4 flex-1">
-            <h1 className="text-sm font-bold text-neutral-200 truncate">
+            <h1 className="text-sm font-bold text-neutral-100 truncate">
               Chapter {index}
             </h1>
           </div>
@@ -187,7 +187,7 @@ const Page = () => {
       <div
         className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 ${showNav ? 'translate-y-0 opacity-100' : 'translate-y-24 opacity-0 pointer-events-none'}`}
       >
-        <div className="bg-[#111111]/95 backdrop-blur-md px-6 py-3.5 rounded-full flex items-center justify-center gap-6 sm:gap-8 border border-neutral-800 shadow-2xl transition-all">
+        <div className="bg-neutral-900/95 backdrop-blur-md px-6 py-3.5 rounded-full flex items-center justify-center gap-6 sm:gap-8 border border-neutral-800 shadow-2xl transition-all">
           {/* Previous Chapter */}
           <button
             onClick={() =>
@@ -201,7 +201,7 @@ const Page = () => {
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          <Play className="w-5 h-5" />
+          <Play className="w-5 h-5 text-amber-400" />
 
           {/* List - List Chapter */}
           <button
@@ -229,9 +229,9 @@ const Page = () => {
 
       {/* Chapter Selection Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div
-            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/80 backdrop-blur-sm"
             onClick={() => setIsModalOpen(false)}
           />
           <div className="relative w-full max-w-lg bg-neutral-900 border border-neutral-800 rounded-3xl overflow-hidden shadow-2xl flex flex-col max-h-[80vh]">
@@ -246,18 +246,18 @@ const Page = () => {
             </div>
 
             <div className="p-6 overflow-hidden flex flex-col">
-              <div className="relative mb-4">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500" />
+              <div className="relative mb-4 group">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-500 group-focus-within:text-amber-400 transition-colors" />
                 <input
                   type="number"
                   placeholder="Search chapter..."
                   value={chapterSearch}
                   onChange={(e) => setChapterSearch(e.target.value)}
-                  className="w-full bg-neutral-800 border border-neutral-700 rounded-2xl py-3 pl-10 pr-4 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 transition-shadow"
+                  className="w-full bg-neutral-800 border border-neutral-700 rounded-2xl py-3 pl-10 pr-4 text-white placeholder-neutral-500 focus:outline-none focus:ring-2 focus:ring-amber-400/30 transition-all"
                 />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-neutral-700">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-neutral-800">
                 {filteredChapters.map((ch) => (
                   <button
                     key={ch.id}
@@ -266,15 +266,15 @@ const Page = () => {
                       setIsModalOpen(false);
                     }}
                     className={`p-3 rounded-2xl border text-sm font-bold transition-all ${ch.data.index.toString() === index.toString()
-                      ? 'bg-purple-600 border-purple-500 text-white shadow-[0_0_15px_rgba(147,51,234,0.3)]'
-                      : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-neutral-500 hover:text-white'
+                      ? 'bg-amber-400 border-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.2)]'
+                      : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-amber-400/50 hover:text-white'
                       }`}
                   >
                     Ch. {ch.data.index}
                   </button>
                 ))}
                 {filteredChapters.length === 0 && (
-                  <div className="col-span-full py-10 text-center text-neutral-500">
+                  <div className="col-span-full py-10 text-center text-neutral-600">
                     No chapters found for &quot;{chapterSearch}&quot;
                   </div>
                 )}
