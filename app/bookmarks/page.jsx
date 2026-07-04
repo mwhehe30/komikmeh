@@ -23,6 +23,29 @@ export default function BookmarksPage() {
         localStorage.setItem('bookmarks', JSON.stringify(next));
     };
 
+    const handleImageError = async (id, slug) => {
+        try {
+            const { getSeriesDetail } = await import('@/lib/api');
+            const detail = await getSeriesDetail(slug);
+            if (detail?.data?.coverImage) {
+                const newImage = detail.data.coverImage;
+                
+                setBookmarks(prev => {
+                    const next = prev.map(b => {
+                        if (b.id === id) {
+                            return { ...b, data: { ...b.data, coverImage: newImage } };
+                        }
+                        return b;
+                    });
+                    localStorage.setItem('bookmarks', JSON.stringify(next));
+                    return next;
+                });
+            }
+        } catch (err) {
+            console.error("Failed to refresh image for", slug, err);
+        }
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
@@ -65,12 +88,17 @@ export default function BookmarksPage() {
                                 <Link href={`/series/${item.data.slug}`}>
                                     <div className="relative aspect-[3/4] w-full overflow-hidden bg-neutral-800">
                                         <Image
-                                            src={item.data.coverImage}
+                                            src={item.data.coverImage || '/placeholder-image.jpg'}
                                             alt={item.data.title}
                                             fill
                                             sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                                             className="object-cover transition-transform duration-500 group-hover:scale-110"
                                             referrerPolicy="no-referrer"
+                                            onError={(e) => {
+                                                if (e.target.getAttribute('data-error')) return;
+                                                e.target.setAttribute('data-error', 'true');
+                                                handleImageError(item.id, item.data.slug);
+                                            }}
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent opacity-80 group-hover:opacity-90 transition-opacity duration-300" />
 

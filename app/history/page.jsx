@@ -31,6 +31,29 @@ export default function HistoryPage() {
         }
     };
 
+    const handleImageError = async (slug) => {
+        try {
+            const { getSeriesDetail } = await import('@/lib/api');
+            const detail = await getSeriesDetail(slug);
+            if (detail?.data?.coverImage) {
+                const newImage = detail.data.coverImage;
+                
+                setHistory(prev => {
+                    const next = prev.map(h => {
+                        if (h.slug === slug) {
+                            return { ...h, coverImage: newImage };
+                        }
+                        return h;
+                    });
+                    localStorage.setItem('global_history', JSON.stringify(next));
+                    return next;
+                });
+            }
+        } catch (err) {
+            console.error("Failed to refresh image for", slug, err);
+        }
+    };
+
     if (loading) {
         return (
             <div className="min-h-screen bg-black flex items-center justify-center">
@@ -92,6 +115,11 @@ export default function HistoryPage() {
                                                 sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                                                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                                                 referrerPolicy="no-referrer"
+                                                onError={(e) => {
+                                                    if (e.target.getAttribute('data-error')) return;
+                                                    e.target.setAttribute('data-error', 'true');
+                                                    handleImageError(item.slug);
+                                                }}
                                             />
                                         ) : (
                                             <div className="w-full h-full flex items-center justify-center bg-neutral-800 text-neutral-600">No Image</div>
