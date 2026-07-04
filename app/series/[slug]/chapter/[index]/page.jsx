@@ -12,7 +12,7 @@ import {
   X,
   Search,
 } from 'lucide-react';
-import { getChapterDetail, getSeriesChapters } from '@/lib/api';
+import { getChapterDetail, getSeriesChapters, getSeriesDetail } from '@/lib/api';
 import { useMemo } from 'react';
 
 const Page = () => {
@@ -20,6 +20,7 @@ const Page = () => {
   const router = useRouter();
 
   const [chapterDetail, setChapterDetail] = useState(null);
+  const [seriesDetail, setSeriesDetail] = useState(null);
   const [chaptersList, setChaptersList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showNav, setShowNav] = useState(true);
@@ -49,9 +50,10 @@ const Page = () => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const [chapterRes, chaptersRes] = await Promise.all([
+        const [chapterRes, chaptersRes, seriesRes] = await Promise.all([
           getChapterDetail(slug, index),
           getSeriesChapters(slug),
+          getSeriesDetail(slug)
         ]);
 
         if (chapterRes && chapterRes.data) {
@@ -59,6 +61,9 @@ const Page = () => {
         }
         if (chaptersRes && chaptersRes.data) {
           setChaptersList(chaptersRes.data);
+        }
+        if (seriesRes && seriesRes.data) {
+          setSeriesDetail(seriesRes.data);
         }
       } catch (err) {
         console.error(err);
@@ -79,8 +84,22 @@ const Page = () => {
         const newHistory = [...history, index.toString()];
         localStorage.setItem(historyKey, JSON.stringify(newHistory));
       }
+
+      if (seriesDetail) {
+        const globalHistory = JSON.parse(localStorage.getItem('global_history') || '[]');
+        const currentItem = {
+          slug: slug,
+          title: seriesDetail.title || seriesDetail.data?.title || slug,
+          coverImage: seriesDetail.coverImage || seriesDetail.data?.coverImage || '',
+          last_read_chapter: index.toString(),
+          timestamp: Date.now()
+        };
+        const filteredHistory = globalHistory.filter(h => h.slug !== slug);
+        filteredHistory.unshift(currentItem);
+        localStorage.setItem('global_history', JSON.stringify(filteredHistory));
+      }
     }
-  }, [slug, index, loading, chapterDetail]);
+  }, [slug, index, loading, chapterDetail, seriesDetail]);
 
   const filteredChapters = useMemo(() => {
     if (!chapterSearch.trim()) return chaptersList;

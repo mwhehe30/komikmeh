@@ -1,17 +1,34 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Home, Search, Bookmark } from 'lucide-react';
+import { Home, Search, Bookmark, History, Bell } from 'lucide-react';
 
 const Bottombar = () => {
   const pathname = usePathname();
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    // Initial load
+    const checkUnread = () => {
+      const notifs = JSON.parse(localStorage.getItem('notifications') || '[]');
+      setUnreadCount(notifs.filter(n => !n.is_read).length);
+    };
+    
+    checkUnread();
+
+    // Setup an interval to check periodically since localStorage might be updated by polling
+    const interval = setInterval(checkUnread, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   const navItems = [
     { icon: Home, href: '/' },
     { icon: Search, href: '/search' },
+    { icon: History, href: '/history' },
     { icon: Bookmark, href: '/bookmarks' },
+    { icon: Bell, href: '/notifications', badge: unreadCount > 0 },
   ];
 
   const activeIndex = navItems.findIndex((item) => {
@@ -36,13 +53,18 @@ const Bottombar = () => {
               href={item.href}
               className="relative flex flex-col items-center group transition-transform active:scale-90"
             >
-              <Icon
-                size={22}
-                strokeWidth={isActive ? 2.5 : 2}
-                className={`transition-colors duration-300 ${
-                  isActive ? 'text-amber-400' : 'text-neutral-500 hover:text-neutral-300'
-                }`}
-              />
+              <div className="relative">
+                <Icon
+                  size={22}
+                  strokeWidth={isActive ? 2.5 : 2}
+                  className={`transition-colors duration-300 ${
+                    isActive ? 'text-amber-400' : 'text-neutral-500 hover:text-neutral-300'
+                  }`}
+                />
+                {item.badge && (
+                  <span className="absolute -top-0.5 -right-0.5 w-2 h-2 bg-red-500 rounded-full border border-neutral-900" />
+                )}
+              </div>
               {isActive && (
                 <div className="absolute -bottom-1.5 w-1 h-1 bg-amber-400 rounded-full shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
               )}
