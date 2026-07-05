@@ -13,6 +13,40 @@ export default function BookmarksPage() {
         const saved = JSON.parse(localStorage.getItem('bookmarks') || '[]');
         setBookmarks(saved);
         setLoading(false);
+
+        // Background update (SWR) - Refreshes images and data without blocking UI
+        if (saved.length > 0) {
+            const updateData = async () => {
+                try {
+                    const { getSeriesDetail } = await import('@/lib/api');
+                    const updated = [...saved];
+                    let changed = false;
+                    
+                    // Update sequentially to avoid rate limiting
+                    for (let i = 0; i < updated.length; i++) {
+                        try {
+                            const detail = await getSeriesDetail(updated[i].data.slug);
+                            if (detail?.data?.coverImage && detail.data.coverImage !== updated[i].data.coverImage) {
+                                updated[i].data.coverImage = detail.data.coverImage;
+                                // We can also update other fields here if we want (e.g., title)
+                                changed = true;
+                            }
+                        } catch (err) {
+                            // ignore error for individual items so the loop continues
+                        }
+                    }
+                    
+                    if (changed) {
+                        setBookmarks([...updated]);
+                        localStorage.setItem('bookmarks', JSON.stringify(updated));
+                    }
+                } catch(e) {
+                    console.error("Background update failed", e);
+                }
+            };
+            
+            updateData();
+        }
     }, []);
 
     const removeBookmark = (e, id) => {

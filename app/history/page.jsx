@@ -14,6 +14,39 @@ export default function HistoryPage() {
         const saved = JSON.parse(localStorage.getItem('global_history') || '[]');
         setHistory(saved);
         setLoading(false);
+        
+        // Background update (SWR) - Refreshes images and data without blocking UI
+        if (saved.length > 0) {
+            const updateData = async () => {
+                try {
+                    const { getSeriesDetail } = await import('@/lib/api');
+                    const updated = [...saved];
+                    let changed = false;
+                    
+                    // Update sequentially to avoid rate limiting
+                    for (let i = 0; i < updated.length; i++) {
+                        try {
+                            const detail = await getSeriesDetail(updated[i].slug);
+                            if (detail?.data?.coverImage && detail.data.coverImage !== updated[i].coverImage) {
+                                updated[i].coverImage = detail.data.coverImage;
+                                changed = true;
+                            }
+                        } catch (err) {
+                            // ignore error for individual items so the loop continues
+                        }
+                    }
+                    
+                    if (changed) {
+                        setHistory([...updated]);
+                        localStorage.setItem('global_history', JSON.stringify(updated));
+                    }
+                } catch(e) {
+                    console.error("Background update failed", e);
+                }
+            };
+            
+            updateData();
+        }
     }, []);
 
     const removeHistory = (e, slug) => {
