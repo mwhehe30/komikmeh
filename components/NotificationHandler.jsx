@@ -23,9 +23,18 @@ export default function NotificationHandler({ children }) {
             checkForUpdates();
         }, 30 * 60 * 1000);
 
+        // Also check whenever the tab regains focus
+        const onVisibilityChange = () => {
+            if (document.visibilityState === 'visible') {
+                checkForUpdates();
+            }
+        };
+        document.addEventListener('visibilitychange', onVisibilityChange);
+
         return () => {
             clearTimeout(timer);
             clearInterval(interval);
+            document.removeEventListener('visibilitychange', onVisibilityChange);
         };
     }, []);
 

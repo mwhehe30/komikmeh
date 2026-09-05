@@ -1,6 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  /* config options here */
+  // Proxy the JSON API through the app so browsers never hit CORS and the
+  // FE can call the same-origin /api/* path in dev and production.
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'https://v1.voratoon.com/backend/:path*',
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

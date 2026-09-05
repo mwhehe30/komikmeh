@@ -206,11 +206,11 @@ export default function HistoryPage() {
                         </div>
                         <h2 className="text-2xl font-bold mb-3 text-white">No Reading History</h2>
                         <p className="text-neutral-400 max-w-sm mx-auto leading-relaxed mb-8">
-                            You haven't read any comics yet. Start exploring and your history will appear here.
+                            You haven&apos;t read any comics yet. Start exploring and your history will appear here.
                         </p>
                         <Link
                             href="/"
-                            className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-sm font-bold rounded-xl text-black bg-amber-400 hover:bg-amber-500 transition-all duration-200 shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.5)] hover:-translate-y-0.5"
+                            className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-sm font-bold rounded-xl text-black bg-amber-400 hover:bg-amber-500 transition-all duration-200 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] hover:-translate-y-0.5"
                         >
                             Explore Comics
                         </Link>

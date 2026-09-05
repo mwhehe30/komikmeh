@@ -41,7 +41,7 @@ const Bottombar = () => {
   }
 
   return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6">
+    <div className="md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 px-6">
       <div className="flex items-center gap-8 px-8 py-3.5 bg-neutral-900/90 backdrop-blur-xl border border-neutral-800 rounded-full shadow-2xl">
         {navItems.map((item, index) => {
           const isActive = activeIndex === index;
@@ -66,7 +66,7 @@ const Bottombar = () => {
                 )}
               </div>
               {isActive && (
-                <div className="absolute -bottom-1.5 w-1 h-1 bg-amber-400 rounded-full shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
+                <div className="absolute -bottom-1.5 w-1 h-1 bg-amber-400 rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
               )}
             </Link>
           );

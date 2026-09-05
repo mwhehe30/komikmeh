@@ -8,12 +8,12 @@ import {
   ChevronRight,
   Home,
   List,
-  Play,
   X,
   Search,
 } from 'lucide-react';
 import { getChapterDetail, getSeriesChapters, getSeriesDetail } from '@/lib/api';
 import { useMemo } from 'react';
+import ErrorState from '@/components/ErrorState';
 
 const Page = () => {
   const { slug, index } = useParams();
@@ -23,6 +23,7 @@ const Page = () => {
   const [seriesDetail, setSeriesDetail] = useState(null);
   const [chaptersList, setChaptersList] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showNav, setShowNav] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [chapterSearch, setChapterSearch] = useState('');
@@ -46,33 +47,36 @@ const Page = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [chapterRes, chaptersRes, seriesRes] = await Promise.all([
-          getChapterDetail(slug, index),
-          getSeriesChapters(slug),
-          getSeriesDetail(slug)
-        ]);
+  const load = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [chapterRes, chaptersRes, seriesRes] = await Promise.all([
+        getChapterDetail(slug, index),
+        getSeriesChapters(slug),
+        getSeriesDetail(slug)
+      ]);
 
-        if (chapterRes && chapterRes.data) {
-          setChapterDetail(chapterRes.data);
-        }
-        if (chaptersRes && chaptersRes.data) {
-          setChaptersList(chaptersRes.data);
-        }
-        if (seriesRes && seriesRes.data) {
-          setSeriesDetail(seriesRes.data);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+      if (chapterRes && chapterRes.data) {
+        setChapterDetail(chapterRes.data);
       }
-    };
+      if (chaptersRes && chaptersRes.data) {
+        setChaptersList(chaptersRes.data);
+      }
+      if (seriesRes && seriesRes.data) {
+        setSeriesDetail(seriesRes.data);
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Gagal memuat chapter. Periksa koneksi Anda.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, index]);
 
   // Track History
@@ -108,30 +112,6 @@ const Page = () => {
     );
   }, [chaptersList, chapterSearch]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-neutral-400">
-        <div className="w-8 h-8 rounded-full border-4 border-amber-400 border-t-transparent animate-spin mb-4"></div>
-        <p>Loading Chapter...</p>
-      </div>
-    );
-  }
-
-  if (!chapterDetail || !chapterDetail.data?.images) {
-    return (
-      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white gap-4">
-        <h1 className="text-2xl font-bold">Chapter Not Found</h1>
-        <Link
-          href={`/series/${slug}`}
-          className="px-6 py-2 bg-amber-400 text-black rounded-full font-bold hover:bg-amber-500 transition"
-        >
-          Back to Series
-        </Link>
-      </div>
-    );
-  }
-
-  // Navigation Logic
   // Komikcast usually sorts chapters descending (latest first).
   const currentIndex = chaptersList.findIndex(
     (ch) => ch.data.index.toString() === index.toString(),
@@ -147,6 +127,101 @@ const Page = () => {
     if (currentIndex < chaptersList.length - 1) {
       prevChapter = chaptersList[currentIndex + 1]; // "Prev" chapter is index + 1 in array
     }
+  }
+
+  // Keyboard navigation (left/right arrows jump chapters)
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      const tag = e.target?.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return;
+      if (isModalOpen) return;
+      if (e.key === 'ArrowRight' && nextChapter) {
+        router.push(`/series/${slug}/chapter/${nextChapter.data.index}`);
+      } else if (e.key === 'ArrowLeft' && prevChapter) {
+        router.push(`/series/${slug}/chapter/${prevChapter.data.index}`);
+      }
+    };
+    window.addEventListener('keydown', onKeyDown);
+    return () => window.removeEventListener('keydown', onKeyDown);
+  }, [slug, nextChapter, prevChapter, isModalOpen, router]);
+
+  // Remember scroll position per chapter and restore it when re-opening
+  const scrollKey = `reader_scroll_${slug}_${index}`;
+  useEffect(() => {
+    const save = () => {
+      try {
+        localStorage.setItem(scrollKey, String(window.scrollY));
+      } catch { /* storage may be unavailable */ }
+    };
+    let ticking = false;
+    const onScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        save();
+        ticking = false;
+      });
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      save();
+    };
+  }, [scrollKey]);
+
+  useEffect(() => {
+    if (loading || !chapterDetail) return;
+    let saved = 0;
+    try {
+      saved = Number(localStorage.getItem(scrollKey)) || 0;
+    } catch { /* storage may be unavailable */ }
+    if (saved <= 0) return;
+
+    let attempts = 0;
+    const tryRestore = () => {
+      if (Math.abs(window.scrollY - saved) > 80) {
+        window.scrollTo({ top: saved, behavior: 'instant' });
+      }
+      if (Math.abs(window.scrollY - saved) > 80 && attempts < 40) {
+        attempts += 1;
+        setTimeout(tryRestore, 150);
+      }
+    };
+    const t = setTimeout(tryRestore, 100);
+    return () => clearTimeout(t);
+  }, [loading, chapterDetail, scrollKey]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-neutral-400">
+        <div className="w-8 h-8 rounded-full border-4 border-amber-400 border-t-transparent animate-spin mb-4"></div>
+        <p>Loading Chapter...</p>
+      </div>
+    );
+  }
+
+  if (error && !chapterDetail) {
+    return (
+      <main className="min-h-screen bg-black flex items-center justify-center px-4">
+        <div className="w-full max-w-xl">
+          <ErrorState onRetry={load} />
+        </div>
+      </main>
+    );
+  }
+
+  if (!chapterDetail || !chapterDetail.data?.images) {
+    return (
+      <div className="min-h-screen bg-black flex flex-col items-center justify-center text-white gap-4">
+        <h1 className="text-2xl font-bold">Chapter Not Found</h1>
+        <Link
+          href={`/series/${slug}`}
+          className="px-6 py-2 bg-amber-400 text-black rounded-full font-bold hover:bg-amber-500 transition"
+        >
+          Back to Series
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -214,18 +289,20 @@ const Page = () => {
               router.push(`/series/${slug}/chapter/${prevChapter.data.index}`)
             }
             disabled={!prevChapter}
-            className="text-neutral-400 hover:text-white transition-colors disabled:opacity-30 disabled:hover:text-neutral-400"
+            className="flex items-center justify-center p-2 -m-2 rounded-full text-neutral-400 transition-all duration-150 hover:text-white hover:bg-white/10 active:bg-white/25 active:scale-90 disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-neutral-400 disabled:active:scale-100"
             title="Previous Chapter"
           >
             <ChevronLeft className="w-6 h-6" />
           </button>
 
-          <Play className="w-5 h-5 text-amber-400" />
-
-          {/* List - List Chapter */}
+          {/* List - Select Chapter (stays highlighted while the modal is open) */}
           <button
             onClick={() => setIsModalOpen(true)}
-            className="text-neutral-400 hover:text-white transition-colors"
+            className={`flex items-center justify-center p-2 -m-2 rounded-full transition-all duration-150 active:scale-90 ${
+              isModalOpen
+                ? 'bg-white/25 text-white'
+                : 'text-neutral-400 hover:text-white hover:bg-white/10 active:bg-white/25'
+            }`}
             title="Select Chapter"
           >
             <List className="w-5 h-5 fill-current" />
@@ -238,7 +315,7 @@ const Page = () => {
               router.push(`/series/${slug}/chapter/${nextChapter.data.index}`)
             }
             disabled={!nextChapter}
-            className="text-neutral-400 hover:text-white transition-colors disabled:opacity-30 disabled:hover:text-neutral-400"
+            className="flex items-center justify-center p-2 -m-2 rounded-full text-neutral-400 transition-all duration-150 hover:text-white hover:bg-white/10 active:bg-white/25 active:scale-90 disabled:opacity-30 disabled:hover:bg-transparent disabled:hover:text-neutral-400 disabled:active:scale-100"
             title="Next Chapter"
           >
             <ChevronRight className="w-6 h-6" />
@@ -285,7 +362,7 @@ const Page = () => {
                       setIsModalOpen(false);
                     }}
                     className={`p-3 rounded-2xl border text-sm font-bold transition-all ${ch.data.index.toString() === index.toString()
-                      ? 'bg-amber-400 border-amber-400 text-black shadow-[0_0_15px_rgba(251,191,36,0.2)]'
+                      ? 'bg-amber-400 border-amber-400 text-black shadow-[0_0_15px_rgba(255,255,255,0.2)]'
                       : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-amber-400/50 hover:text-white'
                       }`}
                   >

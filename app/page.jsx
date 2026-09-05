@@ -6,6 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Star, Bookmark, Bell, BellRing } from 'lucide-react';
 import SkeletonCard from '@/components/SkeletonCard';
+import ErrorState from '@/components/ErrorState';
 import { requestNotificationPermission, sendNotification } from '@/lib/notifications';
 
 export default function Page() {
@@ -15,6 +16,7 @@ export default function Page() {
   const [offset, setOffset] = React.useState(0);
   const [hasMore, setHasMore] = React.useState(true);
   const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
   const [bookmarks, setBookmarks] = React.useState([]);
   const [notifPermission, setNotifPermission] = React.useState('default');
   const [notifEnabled, setNotifEnabled] = React.useState(false);
@@ -94,6 +96,7 @@ export default function Page() {
     if (loading || !hasMore) return;
 
     setLoading(true);
+    setError(null);
 
     try {
       const res = await getSeries(offset, TAKE);
@@ -114,6 +117,7 @@ export default function Page() {
       setHasMore(res.hasMore);
     } catch (err) {
       console.error(err);
+      setError('Gagal memuat komik terbaru. Periksa koneksi Anda.');
     } finally {
       setLoading(false);
     }
@@ -198,6 +202,18 @@ export default function Page() {
           </div>
         </header>
 
+        {/* Error states */}
+        {error && !loading && series.length === 0 && (
+          <ErrorState onRetry={loadMore} />
+        )}
+        {error && series.length > 0 && (
+          <ErrorState
+            compact
+            message="Gagal memuat komik berikutnya. Periksa koneksi Anda."
+            onRetry={loadMore}
+          />
+        )}
+
         <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4 sm:gap-6">
           {series.map((item) => (
             <li
@@ -239,7 +255,7 @@ export default function Page() {
                         {item.chapters?.[0] &&
                           new Date() - new Date(item.chapters[0].updatedAt) <
                           24 * 60 * 60 * 1000 && (
-                            <span className="px-1.5 py-0.5 text-[9px] font-black text-black bg-amber-400 rounded-md shadow-[0_0_10px_rgba(251,191,36,0.5)] animate-pulse">
+                            <span className="px-1.5 py-0.5 text-[9px] font-black text-black bg-amber-400 rounded-md shadow-[0_0_10px_rgba(255,255,255,0.5)] animate-pulse">
                               UP
                             </span>
                           )}

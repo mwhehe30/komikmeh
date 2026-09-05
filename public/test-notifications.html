@@ -20,17 +20,17 @@
         }
         h1 {
             color: #333;
-            border-bottom: 3px solid #4CAF50;
+            border-bottom: 3px solid #000000;
             padding-bottom: 10px;
         }
         .section {
             margin: 20px 0;
             padding: 15px;
             background: #f9f9f9;
-            border-left: 4px solid #4CAF50;
+            border-left: 4px solid #000000;
         }
         button {
-            background: #4CAF50;
+            background: #000000;
             color: white;
             border: none;
             padding: 12px 24px;
@@ -40,24 +40,24 @@
             font-size: 14px;
         }
         button:hover {
-            background: #45a049;
+            background: #333333;
         }
         button.danger {
-            background: #f44336;
+            background: #666666;
         }
         button.danger:hover {
-            background: #da190b;
+            background: #444444;
         }
         button.info {
-            background: #2196F3;
+            background: #888888;
         }
         button.info:hover {
-            background: #0b7dda;
+            background: #555555;
         }
         .result {
             margin-top: 10px;
             padding: 10px;
-            background: #e8f5e9;
+            background: #f4f4f4;
             border-radius: 5px;
             font-family: monospace;
             white-space: pre-wrap;
@@ -65,16 +65,16 @@
             overflow-y: auto;
         }
         .error {
-            background: #ffebee;
-            color: #c62828;
+            background: #1c1c1c;
+            color: #ffffff;
         }
         .warning {
-            background: #fff3e0;
-            color: #e65100;
+            background: #d9d9d9;
+            color: #000000;
         }
         .info {
-            background: #e3f2fd;
-            color: #1565c0;
+            background: #f0f0f0;
+            color: #000000;
         }
         .status {
             display: inline-block;
@@ -84,11 +84,11 @@
             font-weight: bold;
         }
         .status.ok {
-            background: #4CAF50;
+            background: #000000;
             color: white;
         }
         .status.fail {
-            background: #f44336;
+            background: #666666;
             color: white;
         }
     </style>
@@ -156,7 +156,7 @@
     </div>
 
     <script>
-        const BASE_URL = 'https://unofficial-komikcast-api.vercel.app';
+        const BASE_URL = '/api'; // rewritten to the Voratoon backend by next.config.mjs
 
         function showResult(elementId, message, type = 'info') {
             const element = document.getElementById(elementId);

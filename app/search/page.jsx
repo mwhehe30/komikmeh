@@ -4,8 +4,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { searchSeries, getGenres } from '@/lib/api';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Star, Bookmark, Search, X, Filter as FilterIcon, ChevronDown, Check } from 'lucide-react';
+import { Star, Bookmark, Search, X, Filter as FilterIcon, ChevronDown } from 'lucide-react';
 import SkeletonCard from '@/components/SkeletonCard';
+import ErrorState from '@/components/ErrorState';
 
 export default function SearchPage() {
   const TAKE = 18;
@@ -23,59 +24,81 @@ export default function SearchPage() {
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [total, setTotal] = useState(null);
   const [bookmarks, setBookmarks] = useState([]);
   const [isRestored, setIsRestored] = useState(false);
   
   const observerRef = useRef(null);
+  const bootedRef = useRef(false);
+  const prevKeyRef = useRef(null);
 
   useEffect(() => {
-    const fetchInitialData = async () => {
+    const init = async () => {
+      // Load genre list first so restored state can be mapped name -> id
+      let genreList = [];
       try {
         const res = await getGenres();
-        setGenres(res.data || []);
+        genreList = res.data || [];
+        setGenres(genreList);
       } catch (err) {
         console.error(err);
       }
+
+      const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+      setBookmarks(savedBookmarks);
+
+      // Restore state from sessionStorage
+      const savedState = sessionStorage.getItem('explore_page_state');
+      if (savedState) {
+        const { 
+          query: sQuery, 
+          selectedGenres: sGenres, 
+          selectedStatus: sStatus, 
+          selectedType: sType,
+          results: sResults,
+          offset: sOffset,
+          hasMore: sHasMore,
+          scrollPos 
+        } = JSON.parse(savedState);
+        
+        setQuery(sQuery);
+        // Selected genres are stored as ids; map legacy names to ids
+        setSelectedGenres(
+          (sGenres || [])
+            .map((g) =>
+              typeof g === 'number'
+                ? g
+                : genreList.find((genre) => genre.name === g)?.id,
+            )
+            .filter((id) => id != null),
+        );
+        setSelectedStatus(sStatus);
+        setSelectedType(sType);
+        setResults(sResults);
+        setOffset(sOffset);
+        setHasMore(sHasMore);
+        setIsRestored(true);
+
+        // Restore scroll position with retries
+        const restoreScroll = (retryCount = 0) => {
+          window.scrollTo({ top: scrollPos, behavior: 'instant' });
+          if (Math.abs(window.scrollY - scrollPos) > 10 && retryCount < 20) {
+            setTimeout(() => restoreScroll(retryCount + 1), 100);
+          }
+        };
+        setTimeout(restoreScroll, 100);
+      } else {
+        handleSearch();
+      }
+
+      // Boot complete: mark the current (default) search as done so the
+      // debounced effect below doesn't immediately fire a duplicate request.
+      bootedRef.current = true;
+      prevKeyRef.current = JSON.stringify([query, selectedGenres, selectedStatus, selectedType]);
     };
-    fetchInitialData();
 
-    const savedBookmarks = JSON.parse(localStorage.getItem('bookmarks') || '[]');
-    setBookmarks(savedBookmarks);
-
-    // Restore state from sessionStorage
-    const savedState = sessionStorage.getItem('explore_page_state');
-    if (savedState) {
-      const { 
-        query: sQuery, 
-        selectedGenres: sGenres, 
-        selectedStatus: sStatus, 
-        selectedType: sType,
-        results: sResults,
-        offset: sOffset,
-        hasMore: sHasMore,
-        scrollPos 
-      } = JSON.parse(savedState);
-      
-      setQuery(sQuery);
-      setSelectedGenres(sGenres);
-      setSelectedStatus(sStatus);
-      setSelectedType(sType);
-      setResults(sResults);
-      setOffset(sOffset);
-      setHasMore(sHasMore);
-      setIsRestored(true);
-
-      // Restore scroll position with retries
-      const restoreScroll = (retryCount = 0) => {
-        window.scrollTo({ top: scrollPos, behavior: 'instant' });
-        if (Math.abs(window.scrollY - scrollPos) > 10 && retryCount < 20) {
-          setTimeout(() => restoreScroll(retryCount + 1), 100);
-        }
-      };
-      setTimeout(restoreScroll, 100);
-    } else {
-      handleSearch();
-    }
+    init();
   }, []);
 
   // Save state to sessionStorage
@@ -120,11 +143,11 @@ export default function SearchPage() {
     });
   };
 
-  const toggleGenre = (genreName) => {
+  const toggleGenre = (genreId) => {
     setSelectedGenres((prev) =>
-      prev.includes(genreName)
-        ? prev.filter((g) => g !== genreName)
-        : [...prev, genreName]
+      prev.includes(genreId)
+        ? prev.filter((g) => g !== genreId)
+        : [...prev, genreId]
     );
   };
 
@@ -134,40 +157,56 @@ export default function SearchPage() {
     setLoading(true);
     setOffset(0);
     setResults([]);
+    setError(null);
     
     try {
       const filters = {
-        genres: selectedGenres,
+        genreIds: selectedGenres,
         status: selectedStatus,
         type: selectedType
       };
       const res = await searchSeries(query, 0, TAKE, filters);
       setResults(res.data);
+      setTotal(res.total ?? res.data.length);
       setOffset(TAKE);
       setHasMore(res.hasMore);
     } catch (err) {
       console.error(err);
+      setError('Gagal mencari komik. Periksa koneksi Anda.');
     } finally {
       setLoading(false);
     }
   };
 
-  // Auto-search when filters change (but not immediately on query change to avoid too many requests)
+  // Live search: debounce while typing, react immediately to filter changes
   useEffect(() => {
+    if (!bootedRef.current) return;
+
     if (isRestored) {
       setIsRestored(false);
       return;
     }
-    handleSearch();
-  }, [selectedGenres, selectedStatus, selectedType]);
+
+    const key = JSON.stringify([query, selectedGenres, selectedStatus, selectedType]);
+    if (key === prevKeyRef.current) return;
+    prevKeyRef.current = key;
+
+    const timer = setTimeout(() => {
+      handleSearch();
+    }, 400);
+
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, selectedGenres, selectedStatus, selectedType]);
 
   const loadMore = async () => {
     if (loading || !hasMore) return;
 
     setLoading(true);
+    setError(null);
     try {
       const filters = {
-        genres: selectedGenres,
+        genreIds: selectedGenres,
         status: selectedStatus,
         type: selectedType
       };
@@ -178,10 +217,12 @@ export default function SearchPage() {
         res.data.forEach((item) => map.set(item.id, item));
         return Array.from(map.values());
       });
+      setTotal(res.total);
       setOffset((prev) => prev + TAKE);
       setHasMore(res.hasMore);
     } catch (err) {
       console.error(err);
+      setError('Gagal memuat hasil berikutnya. Periksa koneksi Anda.');
     } finally {
       setLoading(false);
     }
@@ -242,7 +283,7 @@ export default function SearchPage() {
             {query && (
               <button
                 type="button"
-                onClick={() => { setQuery(''); setTimeout(handleSearch, 0); }}
+                onClick={() => setQuery('')}
                 className="absolute inset-y-0 right-0 pr-4 flex items-center text-neutral-400 hover:text-white"
               >
                 <X className="w-5 h-5" />
@@ -294,9 +335,9 @@ export default function SearchPage() {
                   {genres.map((genre) => (
                     <button
                       key={genre.id}
-                      onClick={() => toggleGenre(genre.name)}
+                      onClick={() => toggleGenre(genre.id)}
                       className={`px-4 py-2 rounded-full text-xs font-medium transition-all border ${
-                        selectedGenres.includes(genre.name)
+                        selectedGenres.includes(genre.id)
                           ? 'bg-amber-400 border-amber-400 text-black shadow-md shadow-amber-400/20'
                           : 'bg-neutral-800 border-neutral-700 text-neutral-400 hover:border-amber-400/50 hover:text-white'
                       }`}
@@ -329,8 +370,21 @@ export default function SearchPage() {
           )}
         </header>
 
-        {results.length > 0 ? (
-          <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4 sm:gap-6">
+        {error && !loading && results.length === 0 ? (
+          <ErrorState onRetry={handleSearch} />
+        ) : results.length > 0 ? (
+          <>
+            <p className="text-sm text-neutral-500 mb-4">
+              {total != null ? `${total.toLocaleString()} results` : `${results.length} results`}
+            </p>
+            {error && (
+              <ErrorState
+                compact
+                message="Gagal memuat hasil berikutnya. Periksa koneksi Anda."
+                onRetry={handleSearch}
+              />
+            )}
+            <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4 sm:gap-6">
             {results.map((item) => (
               <li
                 key={item.id}
@@ -376,6 +430,11 @@ export default function SearchPage() {
               </li>
             ))}
             {loading && Array.from({ length: 6 }).map((_, i) => <SkeletonCard key={`skeleton-${i}`} />)}
+            </ul>
+          </>
+        ) : loading && results.length === 0 ? (
+          <ul className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-4 sm:gap-6">
+            {Array.from({ length: 12 }).map((_, i) => <SkeletonCard key={`skeleton-${i}`} />)}
           </ul>
         ) : !loading && (
           <div className="flex flex-col items-center justify-center py-20 text-center">

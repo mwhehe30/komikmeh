@@ -13,8 +13,12 @@ export default function NotificationsPage() {
 
     useEffect(() => {
         const saved = JSON.parse(localStorage.getItem('notifications') || '[]');
-        setNotifications(saved);
-        setLoading(false);
+        // Defer the state update a tick to keep SSR/hydration consistent
+        const t = setTimeout(() => {
+            setNotifications(saved);
+            setLoading(false);
+        }, 0);
+        return () => clearTimeout(t);
     }, []);
 
     const markAsReadAndNavigate = (e, notif) => {
@@ -118,7 +122,7 @@ export default function NotificationsPage() {
                                 }`}
                             >
                                 <div className="flex items-start gap-4">
-                                    <div className={`mt-1 flex-shrink-0 w-2 h-2 rounded-full ${item.is_read ? 'bg-transparent' : 'bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]'}`} />
+                                    <div className={`mt-1 flex-shrink-0 w-2 h-2 rounded-full ${item.is_read ? 'bg-transparent' : 'bg-amber-400 shadow-[0_0_8px_rgba(255,255,255,0.8)]'}`} />
                                     <div>
                                         <h3 className={`font-semibold mb-1 transition-colors ${item.is_read ? 'text-neutral-400' : 'text-white group-hover:text-amber-400'}`}>
                                             {item.title}
@@ -145,11 +149,11 @@ export default function NotificationsPage() {
                         </div>
                         <h2 className="text-2xl font-bold mb-3 text-white">No Notifications</h2>
                         <p className="text-neutral-400 max-w-sm mx-auto leading-relaxed mb-8">
-                            You're all caught up! When a bookmarked comic has a new chapter, it will appear here.
+                            You&apos;re all caught up! When a bookmarked comic has a new chapter, it will appear here.
                         </p>
                         <Link
                             href="/bookmarks"
-                            className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-sm font-bold rounded-xl text-black bg-amber-400 hover:bg-amber-500 transition-all duration-200 shadow-[0_0_20px_rgba(251,191,36,0.3)] hover:shadow-[0_0_25px_rgba(251,191,36,0.5)] hover:-translate-y-0.5"
+                            className="inline-flex items-center justify-center px-8 py-3.5 border border-transparent text-sm font-bold rounded-xl text-black bg-amber-400 hover:bg-amber-500 transition-all duration-200 shadow-[0_0_20px_rgba(255,255,255,0.3)] hover:shadow-[0_0_25px_rgba(255,255,255,0.5)] hover:-translate-y-0.5"
                         >
                             View Bookmarks
                         </Link>

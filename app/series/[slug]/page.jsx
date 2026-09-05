@@ -11,9 +11,11 @@ import {
   Search,
   ArrowUpDown,
   ArrowLeft,
-  Bookmark
+  Bookmark,
+  Play
 } from 'lucide-react';
 import { getSeriesDetail, getSeriesChapters } from '@/lib/api';
+import ErrorState from '@/components/ErrorState';
 import { formatDistanceToNow } from 'date-fns';
 
 const Page = () => {
@@ -21,6 +23,7 @@ const Page = () => {
   const [detail, setDetail] = useState(null);
   const [chapters, setChapters] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isBookmarked, setIsBookmarked] = useState(false);
 
   // States for Chapter List Features
@@ -59,28 +62,31 @@ const Page = () => {
     setIsBookmarked(!isBookmarked);
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setLoading(true);
-        const [detailRes, chaptersRes] = await Promise.all([
-          getSeriesDetail(slug),
-          getSeriesChapters(slug),
-        ]);
-        if (detailRes && detailRes.data) {
-          setDetail(detailRes.data);
-        }
-        if (chaptersRes && chaptersRes.data) {
-          setChapters(chaptersRes.data);
-        }
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
+  const load = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [detailRes, chaptersRes] = await Promise.all([
+        getSeriesDetail(slug),
+        getSeriesChapters(slug),
+      ]);
+      if (detailRes && detailRes.data) {
+        setDetail(detailRes.data);
       }
-    };
+      if (chaptersRes && chaptersRes.data) {
+        setChapters(chaptersRes.data);
+      }
+    } catch (err) {
+      console.error(err);
+      setError('Gagal memuat data seri. Periksa koneksi Anda.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug]);
 
   const filteredAndSortedChapters = useMemo(() => {
@@ -111,11 +117,35 @@ const Page = () => {
     setSortOrder((prev) => (prev === 'desc' ? 'asc' : 'desc'));
   };
 
+  // Synopsis paragraphs (handle real newlines AND literal \n / \r\n text)
+  const paragraphs = String(detail?.data?.synopsis || '')
+    .replace(/\\r\\n|\\r|\\n/g, '\n')
+    .replace(/\r\n|\r|\n/g, '\n')
+    .split('\n')
+    .map((p) => p.trim())
+    .filter(Boolean);
+
+  // Continue reading: last chapter opened for this series
+  const lastReadChapter = readHistory[readHistory.length - 1];
+  const hasLastReadChapter =
+    lastReadChapter != null &&
+    chapters.some((ch) => String(ch.data.index) === String(lastReadChapter));
+
   if (loading) {
     return (
       <div className="min-h-screen bg-black flex items-center justify-center">
         <div className="w-8 h-8 rounded-full border-4 border-amber-400 border-t-transparent animate-spin"></div>
       </div>
+    );
+  }
+
+  if (error && !detail) {
+    return (
+      <main className="min-h-screen bg-black flex items-center justify-center px-4">
+        <div className="w-full max-w-xl">
+          <ErrorState onRetry={load} />
+        </div>
+      </main>
     );
   }
 
@@ -267,7 +297,7 @@ const Page = () => {
                   Synopsis
                 </h3>
                 <div className="prose prose-invert max-w-none text-neutral-300 leading-relaxed">
-                  {detail.data.synopsis.split(/\\r\\n|\\n/).map((p, i) => (
+                  {paragraphs.map((p, i) => (
                     <p key={i} className="mb-4">
                       {p}
                     </p>
@@ -310,6 +340,23 @@ const Page = () => {
                   </button>
                 </div>
               </div>
+
+              {hasLastReadChapter && (
+                <Link
+                  href={`/series/${slug}/chapter/${lastReadChapter}`}
+                  className="mb-4 flex items-center justify-between gap-4 px-5 py-4 rounded-2xl bg-white text-black shadow-lg transition-transform hover:scale-[1.01]"
+                >
+                  <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest opacity-60 mb-0.5">
+                      Continue reading
+                    </p>
+                    <p className="font-extrabold">Chapter {lastReadChapter}</p>
+                  </div>
+                  <span className="shrink-0 w-10 h-10 rounded-full bg-black text-white flex items-center justify-center">
+                    <Play className="w-4 h-4 fill-current" />
+                  </span>
+                </Link>
+              )}
 
               <div className="bg-neutral-900 rounded-2xl shadow-lg border border-neutral-800 p-3 sm:p-5">
                 {filteredAndSortedChapters.length > 0 ? (

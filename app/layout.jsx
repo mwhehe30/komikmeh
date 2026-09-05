@@ -2,6 +2,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import './globals.css';
 import NotificationHandler from '@/components/NotificationHandler';
 import Bottombar from '@/components/Bottombar';
+import NavBar from '@/components/NavBar';
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   variable: '--font-plus-jakarta-sans',
@@ -14,8 +15,13 @@ export const metadata = {
   manifest: '/manifest.json',
   referrer: 'no-referrer',
   icons: {
-    icon: '/icon-192x192.png',
-    apple: '/icon-192x192.png',
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icon-192x192.png', type: 'image/png', sizes: '192x192' },
+    ],
+    apple: [
+      { url: '/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+    ],
   },
   appleWebApp: {
     capable: true,
@@ -31,8 +37,6 @@ export const viewport = {
   themeColor: '#000000',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
 };
 
 const RootLayout = ({ children }) => {
@@ -40,6 +44,7 @@ const RootLayout = ({ children }) => {
     <html lang="en">
       <body className={`${plusJakartaSans.variable} antialiased`}>
         <NotificationHandler>
+          <NavBar />
           {children}
           <Bottombar />
         </NotificationHandler>

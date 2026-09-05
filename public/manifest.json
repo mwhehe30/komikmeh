@@ -1,23 +1,75 @@
 {
+    "id": "/",
     "name": "KomikMeh",
     "short_name": "KomikMeh",
-    "description": "Platform baca komik terbaik dengan fitur bookmark dan notifikasi.",
+    "description": "KomikMeh — baca komik, manhwa & manhua online dengan bookmark, history, dan notifikasi chapter terbaru.",
+    "lang": "id",
+    "dir": "ltr",
     "start_url": "/",
+    "scope": "/",
     "display": "standalone",
-    "background_color": "#0a0a0a",
-    "theme_color": "#9333ea",
+    "display_override": ["standalone", "minimal-ui"],
+    "orientation": "portrait",
+    "background_color": "#000000",
+    "theme_color": "#000000",
+    "categories": ["entertainment", "books", "comics"],
     "icons": [
         {
             "src": "/icon-192x192.png",
             "sizes": "192x192",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
         },
         {
             "src": "/icon-512x512.png",
             "sizes": "512x512",
             "type": "image/png",
-            "purpose": "any maskable"
+            "purpose": "any"
+        },
+        {
+            "src": "/maskable-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png",
+            "purpose": "maskable"
+        },
+        {
+            "src": "/maskable-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png",
+            "purpose": "maskable"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "Latest Updates",
+            "short_name": "Latest",
+            "description": "Komik terbaru",
+            "url": "/",
+            "icons": [
+                {
+                    "src": "/icon-192x192.png",
+                    "sizes": "192x192",
+                    "type": "image/png"
+                }
+            ]
+        },
+        {
+            "name": "Explore & Search",
+            "short_name": "Explore",
+            "description": "Cari komik berdasarkan genre, status, dan format",
+            "url": "/search"
+        },
+        {
+            "name": "Reading History",
+            "short_name": "History",
+            "description": "Riwayat baca kamu",
+            "url": "/history"
+        },
+        {
+            "name": "Bookmarks",
+            "short_name": "Bookmarks",
+            "description": "Komik yang kamu simpan",
+            "url": "/bookmarks"
         }
     ]
 }
